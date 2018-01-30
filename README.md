@@ -1,11 +1,23 @@
 # lie-to-me-test
-Hay que instalar Python
-Hay que instalar Tensorflow
-Hay que instalar OpenCV
-Nada más!
+Hay que instalar:
+- Python _<insert link>_
+- Tensorflow _<insert link>_
+- OpenCV _<insert link>_
 
-Después, corré esto:
-
+## MNIST Tutorial
+Para correr los ejemplos del [tutorial de MNIST de Tensorflow](https://www.tensorflow.org/tutorials/layers):
 ```
-python retrain.py --bottleneck_dir=./Users/festeban/Documents/tpprof/lie-to-me/cnn/bottleneck --model_dir=/Users/festeban/Documents/tpprof/lie-to-me/cnn/inception --output_graph=/Users/festeban/Documents/tpprof/lie-to-me/cnn/retrained_graph.pb --output_labels=/Users/festeban/Documents/tpprof/lie-to-me/cnn/retrained_labels.txt --image_dir /Users/festeban/Documents/tpprof/lie-to-me/cnn/photos
+python ./mnist_tutorial/mnist_beginner.py
+python ./mnist_tutorial/mnist_deep.py
+```
+
+## CNN Inception
+Para reentrenar la última capa de la red Inception con tus propias fotos:
+
+1. Poné tus fotos en la carpeta `photos`.
+Tenés que crear dentro de `photos` una carpeta por cada categoría que quieras tener y dentro de esas carpetas las fotos.
+
+2. Corré el comando:
+```
+python ./cnn/retrain.py --bottleneck_dir=./cnn/bottleneck --model_dir=./cnn/inception --output_graph=./cnn/retrained_graph.pb --output_labels=./cnn/retrained_labels.txt --image_dir ./cnn/photos
 ```
