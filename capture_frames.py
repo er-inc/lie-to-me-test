@@ -26,7 +26,8 @@ def capture_images(save_folder):
 
 		if read_correctly:
 			# Save frame to file
-			img_path = os.path.join(save_folder, "{}.jpg".format(count))
+			timestamp = datetime.datetime.now()
+			img_path = os.path.join(save_folder, "{}.jpg".format(timestamp))
 			cv2.imwrite(img_path, frame)
 
 			# Display the resulting frame
