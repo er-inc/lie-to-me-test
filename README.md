@@ -1,8 +1,8 @@
-# lie-to-me-test
+ # lie-to-me-test
 Hay que instalar:
-- Python _<insert link>_
-- Tensorflow _<insert link>_
-- OpenCV _<insert link>_
+- [Python 3](https://algoritmos7540-rw.tk/python)
+- [Tensorflow](https://www.tensorflow.org/install/install_windows)
+- OpenCV 3: [Windows](https://pypi.python.org/pypi/opencv-python) o [Mac, Linux y RaspberryPi](https://www.pyimagesearch.com/opencv-tutorials-resources-guides/)
 
 ## MNIST Tutorial
 Para correr los ejemplos del [tutorial de MNIST de Tensorflow](https://www.tensorflow.org/tutorials/layers):
