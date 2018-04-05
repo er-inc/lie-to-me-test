@@ -1,5 +1,5 @@
  # lie-to-me-test
-Hay que instalar:
+Hay que instalar: 
 - [Python 3](https://algoritmos7540-rw.tk/python)
 - [Tensorflow](https://www.tensorflow.org/install/install_windows)
 - OpenCV 3: [Windows](https://pypi.python.org/pypi/opencv-python) o [Mac, Linux y RaspberryPi](https://www.pyimagesearch.com/opencv-tutorials-resources-guides/)
@@ -11,7 +11,17 @@ python ./mnist_tutorial/mnist_beginner.py
 python ./mnist_tutorial/mnist_deep.py
 ```
 
+## Grabar video
+
+### Grabar como secuencia de imágenes
+1. Modificar en el archivo `capture_frames.py` la carpeta en donde querés que se te guarden las fotos.
+La carpeta **debe existir**.
+2. Correr `capture_frames.py`.
+Las imágenes van a tener el formato `YYYY-MM-dd hh:mm:ss.ms`
+
 ## CNN Inception
+
+### Reentrenamiento
 Para reentrenar la última capa de la red Inception con tus propias fotos:
 
 1. Poné tus fotos en la carpeta `photos`.
@@ -21,3 +31,24 @@ Tenés que crear dentro de `photos` una carpeta por cada categoría que quieras 
 ```
 python ./cnn/retrain.py --bottleneck_dir=./cnn/bottleneck --model_dir=./cnn/inception --output_graph=./cnn/retrained_graph.pb --output_labels=./cnn/retrained_labels.txt --image_dir ./cnn/photos
 ```
+
+### Para clasificar con fotos real time
+Clasifica los frames.
+
+1. Reentrená la red
+2. Corré `./cnn/real_time.py`
+
+### Para clasificar imágenes
+Clasifica todas las imágenes en una carpeta.
+
+1. Reentrená la red
+2. Modificá en el archivo `from_file.py` la carpeta en donde están las fotos.
+3. Corré `./cnn/from_file.py` 
+
+
+
+## RCNN Inception
+
+### Levantar datos para entrenamiento
+
+
