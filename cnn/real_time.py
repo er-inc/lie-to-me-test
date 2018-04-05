@@ -38,7 +38,7 @@ def capture_images(labels):
 		while(True):
 			# Capture frame-by-frame
 			read_correctly, frame = camera.read()
-			
+
 			if read_correctly:
 				# Make the prediction. Big thanks to this SO answer:
 				# http://stackoverflow.com/questions/34484148/feeding-image-data-in-tensorflow-for-transfer-learning

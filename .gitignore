@@ -3,3 +3,5 @@ cnn/inception/*
 cnn/photos/*/*
 cnn/retrained_graph.pb
 cnn/retrained_labels.txt
+test/
+test/*/*
