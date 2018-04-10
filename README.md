@@ -73,6 +73,7 @@ Acá importa para la clasificación cómo van apareciendo las clases y sus tiemp
 }
 ```
 
+Nota: es de suma importancia los rangos de los timestamps. Pues si no se tiene en cuenta algun frame el mismo va a ser clasificado con clase None.
 2. Correr el comando `...`.
 
 
