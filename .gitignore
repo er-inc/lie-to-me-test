@@ -1,6 +1,7 @@
 cnn/bottleneck/*/*
 cnn/inception/*
-cnn/photos/*/*
+cnn/photos
+cnn/photos/*
 cnn/retrained_graph.pb
 cnn/retrained_labels.txt
 test/
