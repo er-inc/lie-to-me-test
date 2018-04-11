@@ -86,8 +86,7 @@ def get_accuracy(predictions, labels):
     accuracy = correct / len(predictions)
     return accuracy
 
-def main():
-    batches = ['1']
+def main(batches):
     labels = get_labels()
 
     for batch in batches:
@@ -107,4 +106,4 @@ def main():
     print("Done.")
 
 if __name__ == '__main__':
-    main()
+    main(['1'])

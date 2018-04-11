@@ -54,27 +54,31 @@ Clasifica todas las imágenes en una carpeta.
 #### Cada video es de una clase en particular
 Para casos donde todo el video se clsifica de una clase y no pedazos de él.
 
-1. Tenés que crear dentro de `rcnn/videos` una carpeta por cada categoría que quieras tener y dentro de esas carpetas los videos de esa categoría.
-
-2. Correr el comando `...`.
-
+Usá la [siguiente forma](#especificar-que-momentos-del-video-son-de-una-clase).
 
 #### Especificar qué momentos del video son de una clase
 Para casos donde el video tiene partes de distintas clases.
 Acá importa para la clasificación cómo van apareciendo las clases y sus tiempos.
 
+0. [Reentrená la CNN](#cnn-inception).
 1. Tenés que ubicar los videos en la carpeta `rcnn/videos` y crear un archivo llamado `rcnn/classes.py` que defina el diccionario `class_per_frame` con el siguiente formato:
 ```
 "nombre_del_video": {
 	"clase": [
 		{ "start":  "YYYY-MM-dd hh:mm:ss.ms",
-		  "end": "YYYY-MM-dd hh:mm:ss.ms" }
+		  "end": 	"YYYY-MM-dd hh:mm:ss.ms" }
 	]
 }
 ```
-
 Nota: es de suma importancia los rangos de los timestamps. Pues si no se tiene en cuenta algun frame el mismo va a ser clasificado con clase None.
-2. Correr el comando `...`.
+2. En el archivo `build_labels.py` , modificar los batches deseados (los videos que se quieren labelear).
+3. Correr el comando `python build_labels.py`.
+4. En el archivo `make_predictions.py` o `make_predictions_pool.py` modificar los batches que se quieren predecir.
+El primer camino sirve para predecir los datos del training usando sólo el resultado de los frames anteriores.
+El segundo predice usando los datos del frame anterior de la última capa previa a la predicción, dándole más información.
+5. Correr el comando `python make_predictions.py` o `python make_predictions_pool.py` correspondientemente.
+6. Modificar en el archivo `rnn_train.py` los batches que se quieren usar para entrenar.
+7. Correr el comando `python rnn_train.py`.
 
 
 ### Clasificación de un video real time
