@@ -4,6 +4,7 @@ cnn/photos
 cnn/photos/*
 cnn/retrained_graph.pb
 cnn/retrained_labels.txt
+rcnn/videos/*
 test/
 test/*/*
 .DS_Store
