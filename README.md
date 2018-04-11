@@ -77,7 +77,7 @@ Nota: es de suma importancia los rangos de los timestamps. Pues si no se tiene e
 El primer camino sirve para predecir los datos del training usando sólo el resultado de los frames anteriores.
 El segundo predice usando los datos del frame anterior de la última capa previa a la predicción, dándole más información.
 5. Correr el comando `python make_predictions.py` o `python make_predictions_pool.py` correspondientemente.
-6. Modificar en el archivo `rnn_train.py` los batches que se quieren usar para entrenar.
+6. Modificar en el archivo `rnn_train.py` los batches que se quieren usar para entrenar y si se predijo con pool o sin pool.
 7. Correr el comando `python rnn_train.py`.
 
 
