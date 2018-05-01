@@ -13,10 +13,12 @@ def capture_images(save_folder):
 	print("La resolucion es de {}x{}".format(camera.get(cv2.CAP_PROP_FRAME_WIDTH), camera.get(cv2.CAP_PROP_FRAME_HEIGHT)))
 	print("El frame count es de {}".format(camera.get(cv2.CAP_PROP_FPS)))
 	print()
-	print("Se pudo cambiar el width a 320: {}".format(camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)))
-	print("Se pudo cambiar el height a 240: {}".format(camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)))
+	print("Se pudo cambiar el width a 640: {}".format(camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)))
+	print("Se pudo cambiar el height a 480: {}".format(camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)))
+	print()
 	print("La resolucion es de {}x{}".format(camera.get(cv2.CAP_PROP_FRAME_WIDTH), camera.get(cv2.CAP_PROP_FRAME_HEIGHT)))
 	print("Se pudo cambiar el frame count a 10: {}".format(camera.set(cv2.CAP_PROP_FPS, 10)))
+	print("El frame count es de {}".format(camera.get(cv2.CAP_PROP_FPS)))
 	
 	count = 0
 	
@@ -44,13 +46,5 @@ def capture_images(save_folder):
 
 #script_path = os.path.dirname(os.path.abspath(__file__))
 current_path = os.getcwd()
-capture_images(os.path.join(current_path, "test"))
-
-""" How to run
-python retrain.py \
-    --bottleneck_dir=/Users/festeban/Documents/tpprof/lie-to-me/cnn/bottleneck \
-    --model_dir=/Users/festeban/Documents/tpprof/lie-to-me/cnn/inception \
-    --output_graph=/Users/festeban/Documents/tpprof/lie-to-me/cnn/retrained_graph.pb \
-    --output_labels=/Users/festeban/Documents/tpprof/lie-to-me/cnn/retrained_labels.txt \
-    --image_dir /Users/festeban/Documents/tpprof/lie-to-me/cnn/photos
-"""
+final_path = os.path.join(os.path.join(os.path.join(current_path, "rcnn"), "videos"), "dani_01_h")
+capture_images(final_path)
