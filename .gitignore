@@ -1,18 +1,23 @@
+# Mac noise
+.DS_Store
+*/.DS_Store
+
+# Python noise
+__pycache__/*
+*/__pycache__/*
+
+# Data
+cnn/photos/*
+rcnn/videos/*
+*.zip
+*/*.zip
+
+# Training data
 cnn/bottleneck/*/*
 cnn/inception/*
-cnn/photos
-cnn/photos/*
 cnn/retrained_graph.pb
 cnn/retrained_labels.txt
-
-rcnn/videos/*
 rcnn/cnn/*
 
 test/
 test/*/*
-
-.DS_Store
-*/.DS_Store
-*.zip
-*/*.zip
-*/__pycache__/

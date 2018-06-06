@@ -1,5 +1,5 @@
 # lie-to-me-test
-Hay que instalar: 
+Hay que instalar:
 - [Python 3](https://algoritmos7540-rw.tk/python)
 - [Tensorflow](https://www.tensorflow.org/install)
 - OpenCV 3: [Windows](https://pypi.python.org/pypi/opencv-python) o [Mac, Linux y RaspberryPi](https://www.pyimagesearch.com/opencv-tutorials-resources-guides/)
@@ -22,9 +22,16 @@ La carpeta **debe existir**.
 Las imágenes van a tener el formato `YYYY-MM-dd hh:mm:ss.ms`
 
 ## Descargar CNN Inception
-Todas las operaciones que hagamos van a usar la [red Inception]() ya entrenada con muchas imàgenes.
-Y vamos a reentrenar sòlo las ùltimas capas con lo que nos interesa para nuestro problema.
-... Correr python retrain.py una vez ...   Estaría bueno separarlo   ....
+Todas las operaciones que hagamos van a usar la red Inception V3 por default, que es uno de los [modelos preentrenados](https://www.tensorflow.org/tutorials/image_recognition) con muchas imágenes.
+Y vamos a reentrenar sólo las últimas capas con lo que nos interesa para nuestro problema.
+
+1. Correr el comando:
+```
+python download_model.py
+	--model_dir=./cnn/inception
+```
+
+De todas formas, los pasos que lo necesiten se encargarán de esto.
 
 ## CNN
 
@@ -36,7 +43,12 @@ Tenés que crear dentro de `cnn/photos` una carpeta por cada categoría que quie
 
 2. Corré el comando:
 ```
-python3 ./cnn/retrain.py --bottleneck_dir=./cnn/bottleneck --model_dir=./cnn/inception --output_graph=./cnn/retrained_graph.pb --output_labels=./cnn/retrained_labels.txt --image_dir ./cnn/photos
+python3 ./cnn/retrain.py
+	--bottleneck_dir=./cnn/bottleneck
+	--model_dir=./cnn/inception
+	--output_graph=./cnn/retrained_graph.pb
+	--output_labels=./cnn/retrained_labels.txt
+	--image_dir ./cnn/photos
 ```
 
 ### Clasificación de imágenes real time
@@ -50,7 +62,7 @@ Clasifica todas las imágenes en una carpeta.
 
 1. Reentrená la red
 2. Modificá en el archivo `from_file.py` la carpeta en donde están las fotos.
-3. Corré `./cnn/from_file.py` 
+3. Corré `./cnn/from_file.py`
 
 
 ## RCNN
@@ -98,7 +110,7 @@ El segundo predice usando los datos del frame anterior de la última capa previa
 Clasifica cada 4 segundos (40 frames), el frame que se está viendo.
 
 1. Reentrená la red
-2. 
+2.
 
 ### Clasificación de un video
 Clasifica los distintos frames del video.
