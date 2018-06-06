@@ -7,10 +7,10 @@ from tflearn.data_utils import to_categorical
 import tflearn
 import numpy as np
 import pickle
-from classes import classes
+from classes import class_per_frame
 
 def get_classes(batches = None):
-    return list(set([ clase for clase in dic_video for video, dic_video in classes.items() if not batches or video in batches ]))
+    return list(set([ clase for video, dic_video in class_per_frame.items() if not batches or video in batches for clase in dic_video ]))
 
 def get_data(filename, num_frames, num_classes, input_length):
     """Get the data from our saved predictions or pooled features."""
@@ -33,7 +33,7 @@ def get_data(filename, num_frames, num_classes, input_length):
                 temp_list.append(features)
                 flat = list(temp_list)
                 X.append(np.array(flat))
-                y.append(get_classes.index(actual)) # Convert our labels into integer.
+                y.append(get_classes().index(actual)) # Convert our labels into integer.
                 temp_list.popleft()
             else:
                 temp_list.append(features)

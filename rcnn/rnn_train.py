@@ -26,7 +26,7 @@ def main(filename, frames, batch_size, num_classes, input_length):
     model.save('checkpoints/rnn.tflearn')
 
 if __name__ == '__main__':
-    batches = ['1']
+    batches = ['fede_01_h', 'fede_02_c', 'dani_01_h', 'dani_02_c']
     pool = False
     if pool:
         filename = 'data/cnn-features-frames-1.pkl'

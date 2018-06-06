@@ -1,8 +1,10 @@
- # lie-to-me-test
+# lie-to-me-test
 Hay que instalar: 
 - [Python 3](https://algoritmos7540-rw.tk/python)
-- [Tensorflow](https://www.tensorflow.org/install/install_windows)
+- [Tensorflow](https://www.tensorflow.org/install)
 - OpenCV 3: [Windows](https://pypi.python.org/pypi/opencv-python) o [Mac, Linux y RaspberryPi](https://www.pyimagesearch.com/opencv-tutorials-resources-guides/)
+- [Pip](https://pip.pypa.io/en/stable/installing/)
+- Install python dependencies: `pip3 install -r requirements.txt`
 
 ## MNIST Tutorial
 Para correr los ejemplos del [tutorial de MNIST de Tensorflow](https://www.tensorflow.org/tutorials/layers):
@@ -19,7 +21,12 @@ La carpeta **debe existir**.
 2. Correr `capture_frames.py`.
 Las imágenes van a tener el formato `YYYY-MM-dd hh:mm:ss.ms`
 
-## CNN Inception
+## Descargar CNN Inception
+Todas las operaciones que hagamos van a usar la [red Inception]() ya entrenada con muchas imàgenes.
+Y vamos a reentrenar sòlo las ùltimas capas con lo que nos interesa para nuestro problema.
+... Correr python retrain.py una vez ...   Estaría bueno separarlo   ....
+
+## CNN
 
 ### Reentrenamiento
 Para reentrenar la última capa de la red Inception con tus propias fotos:
@@ -46,15 +53,12 @@ Clasifica todas las imágenes en una carpeta.
 3. Corré `./cnn/from_file.py` 
 
 
-
-## RCNN Inception
+## RCNN
 
 ### Reentrenamiento
 
 #### Cada video es de una clase en particular
-Para casos donde todo el video se clsifica de una clase y no pedazos de él.
-
-Usá la [siguiente forma](#especificar-que-momentos-del-video-son-de-una-clase).
+Para casos donde todo el video se clasifica de una clase y no pedazos de él, hay que seguir el [siguiente formato](#especificar-que-momentos-del-video-son-de-una-clase), especificando toda la duración de una sola clase.
 
 #### Especificar qué momentos del video son de una clase
 Para casos donde el video tiene partes de distintas clases.
@@ -64,21 +68,27 @@ Acá importa para la clasificación cómo van apareciendo las clases y sus tiemp
 1. Tenés que ubicar los videos en la carpeta `rcnn/videos` y crear un archivo llamado `rcnn/classes.py` que defina el diccionario `class_per_frame` con el siguiente formato:
 ```
 "nombre_del_video": {
-	"clase": [
+	"clase1": [
+		{ "start":  "YYYY-MM-dd hh:mm:ss.ms",
+		  "end": 	"YYYY-MM-dd hh:mm:ss.ms" },
+		{ "start":  "YYYY-MM-dd hh:mm:ss.ms",
+		  "end": 	"YYYY-MM-dd hh:mm:ss.ms" }
+	],
+	"clase2": [
 		{ "start":  "YYYY-MM-dd hh:mm:ss.ms",
 		  "end": 	"YYYY-MM-dd hh:mm:ss.ms" }
 	]
 }
 ```
 Nota: es de suma importancia los rangos de los timestamps. Pues si no se tiene en cuenta algun frame el mismo va a ser clasificado con clase None.
-2. En el archivo `build_labels.py` , modificar los batches deseados (los videos que se quieren labelear).
-3. Correr el comando `python build_labels.py`.
-4. En el archivo `make_predictions.py` o `make_predictions_pool.py` modificar los batches que se quieren predecir.
-El primer camino sirve para predecir los datos del training usando sólo el resultado de los frames anteriores.
+2. Moverse a la carpeta `rcnn`.
+3. En el archivo `build_labels.py` , modificar los batches deseados (los videos que se quieren labelear).
+4. Correr el comando `python build_labels.py`.
+5. Reentrenar CNN. ... cómo? ...
+5. Modificar en el archivo `rnn_train.py` los batches que se quieren usar para entrenar y si se predijo sin o con pool.
+El primer camino (sin pool) sirve para predecir los datos del training usando sólo el resultado de los frames anteriores.
 El segundo predice usando los datos del frame anterior de la última capa previa a la predicción, dándole más información.
-5. Correr el comando `python make_predictions.py` o `python make_predictions_pool.py` correspondientemente.
-6. Modificar en el archivo `rnn_train.py` los batches que se quieren usar para entrenar y si se predijo con pool o sin pool.
-7. Correr el comando `python rnn_train.py`.
+6. Correr el comando `python rnn_train.py`.
 
 
 ### Clasificación de un video real time
@@ -91,4 +101,5 @@ Clasifica cada 4 segundos (40 frames), el frame que se está viendo.
 Clasifica los distintos frames del video.
 
 1. Reentrená la red
-2. 
+2. En el archivo `make_predictions.py` o `make_predictions_pool.py` modificar los batches que se quieren predecir.
+3. Correr el comando `python make_predictions.py` o `python make_predictions_pool.py` correspondientemente, según lo elegido en el paso 5 del reentrnamiento.

@@ -9,3 +9,5 @@ test/
 test/*/*
 .DS_Store
 */.DS_Store
+*.zip
+*/*.zip

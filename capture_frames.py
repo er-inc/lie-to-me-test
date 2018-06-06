@@ -46,5 +46,5 @@ def capture_images(save_folder):
 
 #script_path = os.path.dirname(os.path.abspath(__file__))
 current_path = os.getcwd()
-final_path = os.path.join(os.path.join(os.path.join(current_path, "rcnn"), "videos"), "dani_01_h")
+final_path = os.path.join(os.path.join(os.path.join(current_path, "rcnn"), "videos"), "dani_02_c")
 capture_images(final_path)

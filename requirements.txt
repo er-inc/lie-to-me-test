@@ -1,0 +1,6 @@
+tensorflow
+#tensorflow-gpu
+tflearn
+scikit-learn
+tqdm
+scipy

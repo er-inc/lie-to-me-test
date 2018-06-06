@@ -106,4 +106,4 @@ def main(batches):
     print("Done.")
 
 if __name__ == '__main__':
-    main(['1'])
+    main(['fede_01_h', 'fede_02_c', 'dani_01_h', 'dani_02_c'])
