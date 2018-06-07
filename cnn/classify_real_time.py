@@ -6,14 +6,9 @@ import cv2
 import os
 import time
 import argparse
+from utils import get_labels
 
-def get_labels(retrained_labels_path):
-	"""Get a list of labels so we can see if what class it is."""
-	with open(retrained_labels_path, 'r') as fin:
-		labels = [line.rstrip('\n') for line in fin]
-	return labels
-
-def capture_images(labels, retrained_graph_path):
+def capture_and_classify_images(labels, retrained_graph_path):
 	"""Stream images off the camera and save them."""
 	camera = cv2.VideoCapture(0)
 
@@ -65,22 +60,23 @@ def capture_images(labels, retrained_graph_path):
 	cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-  parser = argparse.ArgumentParser()
-  parser.add_argument(
-      '--retrained_labels',
-      type=str,
-      default='/tmp/output_labels.txt',
-      help="""\
-      Where to find the output_labels of the retrain.py script.\
-      """
-  )
-  parser.add_argument(
-      '--retrained_graph',
-      type=str,
-      default='/tmp/output_graph.pb',
-      help="""\
-      Where to find the retrained graph model
-	  (output_graph of retrain.py).\
-      """)
-  FLAGS, unparsed = parser.parse_known_args()
-  capture_images(get_labels(FLAGS.retrained_labels), FLAGS.retrained_graph)
+	parser = argparse.ArgumentParser()
+	parser.add_argument(
+		'--retrained_labels',
+		type=str,
+		default='/tmp/output_labels.txt',
+		help="""\
+		Where to find the output_labels of the retrain.py script.\
+		"""
+	)
+	parser.add_argument(
+		'--retrained_graph',
+		type=str,
+		default='/tmp/output_graph.pb',
+		help="""\
+		Where to find the retrained graph model
+		(output_graph of retrain.py).\
+		"""
+	)
+	FLAGS, unparsed = parser.parse_known_args()
+	capture_and_classify_images(get_labels(FLAGS.retrained_labels), FLAGS.retrained_graph)

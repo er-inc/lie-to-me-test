@@ -105,3 +105,9 @@ def create_model_info(architecture):
       'input_std': input_std,
       'quantize_layer': is_quantized,
   }
+
+def get_labels(retrained_labels_path):
+	"""Get a list of labels so we can see if what class it is."""
+	with open(retrained_labels_path, 'r') as fin:
+		labels = [line.rstrip('\n') for line in fin]
+	return labels
