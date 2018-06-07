@@ -44,6 +44,5 @@ def capture_images(labels, source):
 
 				print("Imagen: %s, prediccion: %s (%.2f%%)" % (file, predicted_label, max_value * 100))
 
-
 current_path = os.getcwd()
 capture_images(get_labels(), os.path.join(current_path, "../test"))

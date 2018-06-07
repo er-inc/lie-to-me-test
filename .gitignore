@@ -4,10 +4,15 @@ cnn/photos
 cnn/photos/*
 cnn/retrained_graph.pb
 cnn/retrained_labels.txt
+
 rcnn/videos/*
+rcnn/cnn/*
+
 test/
 test/*/*
+
 .DS_Store
 */.DS_Store
 *.zip
 */*.zip
+*/__pycache__/
