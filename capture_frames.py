@@ -1,9 +1,11 @@
 from __future__ import print_function
-import os
+
 import argparse
 import datetime
-import numpy as np
+import os
+
 import cv2
+import numpy as np
 
 from utils import convert_path_to_windows_format
 
@@ -39,7 +41,6 @@ def capture_images(save_folder):
 
 			img_path = os.path.join(save_folder, "{}.jpg".format(timestamp))
 			cv2.imwrite(img_path, frame)
-			print("pathhh: ", img_path)
 			# Display the resulting frame
 			cv2.imshow('Video', frame)
 		else:
@@ -56,16 +57,16 @@ def capture_images(save_folder):
 
 
 if __name__ == '__main__':
-  parser = argparse.ArgumentParser()
-  parser.add_argument(
-      '--video_dir',
-      type=str,
-      default='/tmp/video',
-      help="""\
-      Path to store recorded images.\
-      """
-  )
-  FLAGS, unparsed = parser.parse_known_args()
-  if not os.path.exists(FLAGS.video_dir):
-    os.makedirs(FLAGS.video_dir)
-  capture_images(FLAGS.video_dir)
+	parser = argparse.ArgumentParser()
+	parser.add_argument(
+		'--video_dir',
+		type=str,
+		default='/tmp/video',
+		help="""\
+		Path to store recorded images.\
+		"""
+	)
+	FLAGS, unparsed = parser.parse_known_args()
+	if not os.path.exists(FLAGS.video_dir):
+		os.makedirs(FLAGS.video_dir)
+	capture_images(FLAGS.video_dir)
