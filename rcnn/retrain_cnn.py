@@ -156,8 +156,9 @@ def create_image_lists(videos_dir, testing_percentage, validation_percentage):
     testing_images = []
     validation_images = []
 
-    dir_name = '{}/'.format(videos_dir) + folder
-    images = sorted(glob.glob(dir_name + '/*'))
+    dir_name = os.path.join(videos_dir, folder)
+
+    images = sorted(glob.glob(os.path.join(dir_name, '*')))
 
     if len(images) < 20:
       tf.logging.warning(
@@ -168,7 +169,7 @@ def create_image_lists(videos_dir, testing_percentage, validation_percentage):
           'never be selected.'.format(dir_name, MAX_NUM_IMAGES_PER_CLASS))
 
     for image_path in images:
-      timestamp = image_path.replace('.jpg', '').split('/')[-1]
+      timestamp = image_path.replace('.jpg', '').split('/')[-1] # This will brake in Windows I think, any ideas?
 
       label_name = None
 
