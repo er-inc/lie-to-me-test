@@ -5,14 +5,15 @@ import datetime
 import cv2
 import os
 import time
+import argparse
 
-def get_labels():
-	"""Get a list of labels so we can see if it's an ad or not."""
-	with open('retrained_labels.txt', 'r') as fin:
+def get_labels(retrained_labels_path):
+	"""Get a list of labels so we can see if what class it is."""
+	with open(retrained_labels_path, 'r') as fin:
 		labels = [line.rstrip('\n') for line in fin]
 	return labels
 
-def capture_images(labels):
+def capture_images(labels, retrained_graph_path):
 	"""Stream images off the camera and save them."""
 	camera = cv2.VideoCapture(0)
 
@@ -27,14 +28,14 @@ def capture_images(labels):
 	print("Se pudo cambiar el frame count a 10: {}".format(camera.set(cv2.CAP_PROP_FPS, 10)))
 
 	# Unpersists graph from file
-	with tf.gfile.FastGFile("retrained_graph.pb", 'rb') as f:
+	with tf.gfile.FastGFile(retrained_graph_path, 'rb') as f:
 		graph_def = tf.GraphDef()
 		graph_def.ParseFromString(f.read())
 		_ = tf.import_graph_def(graph_def, name='')
 
 	with tf.Session() as sess:
 		softmax_tensor = sess.graph.get_tensor_by_name('final_result:0')
-		
+
 		while(True):
 			# Capture frame-by-frame
 			read_correctly, frame = camera.read()
@@ -63,4 +64,23 @@ def capture_images(labels):
 	camera.release()
 	cv2.destroyAllWindows()
 
-capture_images(get_labels())
+if __name__ == '__main__':
+  parser = argparse.ArgumentParser()
+  parser.add_argument(
+      '--retrained_labels',
+      type=str,
+      default='/tmp/output_labels.txt',
+      help="""\
+      Where to find the output_labels of the retrain.py script.\
+      """
+  )
+  parser.add_argument(
+      '--retrained_graph',
+      type=str,
+      default='/tmp/output_graph.pb',
+      help="""\
+      Where to find the retrained graph model
+	  (output_graph of retrain.py).\
+      """)
+  FLAGS, unparsed = parser.parse_known_args()
+  capture_images(get_labels(FLAGS.retrained_labels), FLAGS.retrained_graph)

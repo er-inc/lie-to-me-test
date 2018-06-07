@@ -5,6 +5,8 @@
 # Python noise
 __pycache__/*
 */__pycache__/*
+*.pyc
+*/*.pyc
 
 # Data
 cnn/photos/*
