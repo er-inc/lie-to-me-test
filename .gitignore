@@ -16,5 +16,3 @@ test/*/*
 *.zip
 */*.zip
 */__pycache__/
-
-.github
