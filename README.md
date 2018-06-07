@@ -11,8 +11,8 @@ para instalar `tensorflow-gpu` en vez de `tensorflow`.
 ## MNIST Tutorial
 Para correr los ejemplos del [tutorial de MNIST de Tensorflow](https://www.tensorflow.org/tutorials/layers):
 ```
-python ./mnist_tutorial/mnist_beginner.py
-python ./mnist_tutorial/mnist_deep.py
+python3 ./mnist_tutorial/mnist_beginner.py
+python3 ./mnist_tutorial/mnist_deep.py
 ```
 
 ## Grabar video
@@ -27,7 +27,7 @@ Y vamos a reentrenar sólo las últimas capas con lo que nos interesa para nuest
 
 1. Correr el comando:
 ```
-python ./cnn/download_model.py
+python3 ./cnn/download_model.py
 	--model_dir=./cnn/inception
 ```
 
@@ -56,14 +56,24 @@ python3 ./cnn/retrain.py
 Clasifica los frames.
 
 1. Reentrená la red
-2. Corré `./cnn/real_time.py`
+2. Corré
+```
+python3 ./cnn/classify_real_time.py
+	--retrained_labels ./cnn/retrained_labels.txt
+	--retrained_graph ./cnn/retrained_graph.pb
+	--data ./cnn/photos
+```
 
 ### Clasificación de imágenes
 Clasifica todas las imágenes en una carpeta.
 
 1. Reentrená la red
-2. Modificá en el archivo `from_file.py` la carpeta en donde están las fotos.
-3. Corré `./cnn/from_file.py`
+2. Corré:
+```
+python3 ./cnn/classify_files.py
+	--retrained_labels ./cnn/retrained_labels.txt
+	--retrained_graph ./cnn/retrained_graph.pb
+```
 
 
 ## RCNN
@@ -81,14 +91,14 @@ Acá importa para la clasificación cómo van apareciendo las clases y sus tiemp
 ```
 "nombre_del_video": {
 	"clase1": [
-		{ "start":  "YYYY-MM-dd hh:mm:ss.ms",
-		  "end": 	"YYYY-MM-dd hh:mm:ss.ms" },
-		{ "start":  "YYYY-MM-dd hh:mm:ss.ms",
-		  "end": 	"YYYY-MM-dd hh:mm:ss.ms" }
+		{ "start":  "YYYY-MM-dd hh-mm-ss.ms",
+		  "end": 	"YYYY-MM-dd hh-mm-ss.ms" },
+		{ "start":  "YYYY-MM-dd hh-mm-ss.ms",
+		  "end": 	"YYYY-MM-dd hh-mm-ss.ms" }
 	],
 	"clase2": [
-		{ "start":  "YYYY-MM-dd hh:mm:ss.ms",
-		  "end": 	"YYYY-MM-dd hh:mm:ss.ms" }
+		{ "start":  "YYYY-MM-dd hh-mm-ss.ms",
+		  "end": 	"YYYY-MM-dd hh-mm-ss.ms" }
 	]
 }
 ```
