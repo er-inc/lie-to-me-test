@@ -5,6 +5,8 @@ Hay que instalar:
 - OpenCV 3: [Windows](https://pypi.python.org/pypi/opencv-python) o [Mac, Linux y RaspberryPi](https://www.pyimagesearch.com/opencv-tutorials-resources-guides/)
 - [Pip](https://pip.pypa.io/en/stable/installing/)
 - Install python dependencies: `pip3 install -r requirements.txt`
+Si tenés una computadora con GPU, primero modificá `requirements.txt`
+para instalar `tensorflow-gpu` en vez de `tensorflow`.
 
 ## MNIST Tutorial
 Para correr los ejemplos del [tutorial de MNIST de Tensorflow](https://www.tensorflow.org/tutorials/layers):
@@ -16,9 +18,7 @@ python ./mnist_tutorial/mnist_deep.py
 ## Grabar video
 
 ### Grabar como secuencia de imágenes
-1. Modificar en el archivo `capture_frames.py` la carpeta en donde querés que se te guarden las fotos.
-La carpeta **debe existir**.
-2. Correr `capture_frames.py`.
+1. Correr `python capture_frames.py --video_dir ./<path_a_carpeta>`.
 Las imágenes van a tener el formato `YYYY-MM-dd hh:mm:ss.ms`
 
 ## Descargar CNN Inception
@@ -27,11 +27,12 @@ Y vamos a reentrenar sólo las últimas capas con lo que nos interesa para nuest
 
 1. Correr el comando:
 ```
-python download_model.py
+python ./cnn/download_model.py
 	--model_dir=./cnn/inception
 ```
 
 De todas formas, los pasos que lo necesiten se encargarán de esto.
+
 
 ## CNN
 

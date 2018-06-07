@@ -1,13 +1,16 @@
 from __future__ import print_function
-import numpy as np
-import datetime
-import cv2
 import os
+import argparse
+import datetime
+import numpy as np
+import cv2
+
+from utils import convert_path_to_windows_format
 
 def capture_images(save_folder):
 	"""Stream images off the camera and save them."""
 	camera = cv2.VideoCapture(0)
-	
+
 	if not camera.isOpened():
 		print("Hubo un error y no se pudo iniciar la camara de captura.")
 		return
@@ -29,12 +32,18 @@ def capture_images(save_folder):
 
 		if read_correctly:
 			# Save frame to file
-			timestamp = datetime.datetime.now()
+
+			# Windows doesn't accept ":" in file name
+			# and cv2.imwrite will silently fail
+			timestamp = str(datetime.datetime.now()).replace(":", "-")
+
 			img_path = os.path.join(save_folder, "{}.jpg".format(timestamp))
 			cv2.imwrite(img_path, frame)
-
+			print("pathhh: ", img_path)
 			# Display the resulting frame
 			cv2.imshow('Video', frame)
+		else:
+			print("Couldn't read image from cv2 correctly.")
 
 		if cv2.waitKey(1) & 0xFF == ord('q'):
 			break
@@ -45,7 +54,18 @@ def capture_images(save_folder):
 	camera.release()
 	cv2.destroyAllWindows()
 
-#script_path = os.path.dirname(os.path.abspath(__file__))
-current_path = os.getcwd()
-final_path = os.path.join(os.path.join(os.path.join(current_path, "rcnn"), "videos"), "dani_02_c")
-capture_images(final_path)
+
+if __name__ == '__main__':
+  parser = argparse.ArgumentParser()
+  parser.add_argument(
+      '--video_dir',
+      type=str,
+      default='/tmp/video',
+      help="""\
+      Path to store recorded images.\
+      """
+  )
+  FLAGS, unparsed = parser.parse_known_args()
+  if not os.path.exists(FLAGS.video_dir):
+    os.makedirs(FLAGS.video_dir)
+  capture_images(FLAGS.video_dir)
