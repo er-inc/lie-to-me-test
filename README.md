@@ -31,12 +31,12 @@ Y vamos a reentrenar sòlo las ùltimas capas con lo que nos interesa para nuest
 ### Reentrenamiento
 Para reentrenar la última capa de la red Inception con tus propias fotos:
 
-1. Poné tus fotos en la carpeta `test`.
-Tenés que crear dentro de `test` una carpeta por cada categoría que quieras tener y dentro de esas carpetas las fotos.
+1. Poné tus fotos en la carpeta `cnn/photos`.
+Tenés que crear dentro de `cnn/photos` una carpeta por cada categoría que quieras tener y dentro de esas carpetas las fotos.
 
 2. Corré el comando:
 ```
-python3 ./cnn/retrain.py --bottleneck_dir=./cnn/bottleneck --model_dir=./cnn/inception --output_graph=./cnn/retrained_graph.pb --output_labels=./cnn/retrained_labels.txt --image_dir ./test
+python3 ./cnn/retrain.py --bottleneck_dir=./cnn/bottleneck --model_dir=./cnn/inception --output_graph=./cnn/retrained_graph.pb --output_labels=./cnn/retrained_labels.txt --processed_video_dir ./cnn/photos
 ```
 
 ### Clasificación de imágenes real time
@@ -64,7 +64,7 @@ Para casos donde todo el video se clasifica de una clase y no pedazos de él, ha
 Para casos donde el video tiene partes de distintas clases.
 Acá importa para la clasificación cómo van apareciendo las clases y sus tiempos.
 
-0. Tenés que ubicar los videos en la carpeta `rcnn/videos` y crear un archivo llamado `rcnn/classes.py` que defina el diccionario `class_per_frame` con el siguiente formato:
+1. Tenés que ubicar los videos en la carpeta `rcnn/videos` y crear un archivo llamado `rcnn/classes.py` que defina el diccionario `class_per_frame` con el siguiente formato:
 ```
 "nombre_del_video": {
 	"clase1": [
@@ -81,17 +81,17 @@ Acá importa para la clasificación cómo van apareciendo las clases y sus tiemp
 ```
 Nota: es de suma importancia los rangos de los timestamps. Pues si no se tiene en cuenta algun frame el mismo va a ser clasificado con clase None.
 
-1. Moverse a la carpeta `rcnn`.
-2. Reentrená la CNN usando el retrain dentro de rcnn. Corré el comando:
+2. Moverse a la carpeta `rcnn`.
+3. Reentrená la CNN usando el retrain dentro de rcnn. Corré el comando:
 ```
-python3 ./cnn/retrain.py --bottleneck_dir=./cnn/bottleneck --model_dir=./cnn/inception --output_graph=./cnn/retrained_graph.pb --output_labels=./cnn/retrained_labels.txt --image_dir ./test
+python3 ./cnn/retrain.py --bottleneck_dir=./cnn/bottleneck --model_dir=./cnn/inception --output_graph=./cnn/retrained_graph.pb --output_labels=./cnn/retrained_labels.txt --image_dir ./videos
 ```
-3. En el archivo `build_labels.py` , modificar los batches deseados (los videos que se quieren labelear).
-4. Correr el comando `python build_labels.py`.
-5. Modificar en el archivo `rnn_train.py` los batches que se quieren usar para entrenar y si se predijo sin o con pool.
+4. En el archivo `build_labels.py` , modificar los batches deseados (los videos que se quieren labelear).
+5. Correr el comando `python build_labels.py`.
+6. Modificar en el archivo `rnn_train.py` los batches que se quieren usar para entrenar y si se predijo sin o con pool.
 El primer camino (sin pool) sirve para predecir los datos del training usando sólo el resultado de los frames anteriores.
 El segundo predice usando los datos del frame anterior de la última capa previa a la predicción, dándole más información.
-6. Correr el comando `python rnn_train.py`.
+7. Correr el comando `python rnn_train.py`.
 
 
 ### Clasificación de un video real time
