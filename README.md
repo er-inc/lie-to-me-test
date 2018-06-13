@@ -36,7 +36,7 @@ Tenés que crear dentro de `cnn/photos` una carpeta por cada categoría que quie
 
 2. Corré el comando:
 ```
-python3 ./cnn/retrain.py --bottleneck_dir=./cnn/bottleneck --model_dir=./cnn/inception --output_graph=./cnn/retrained_graph.pb --output_labels=./cnn/retrained_labels.txt --processed_video_dir ./cnn/photos
+python3 ./cnn/retrain.py --bottleneck_dir=./cnn/bottleneck --model_dir=./cnn/inception --output_graph=./cnn/retrained_graph.pb --output_labels=./cnn/retrained_labels.txt --image_dir ./cnn/photos
 ```
 
 ### Clasificación de imágenes real time
@@ -84,7 +84,7 @@ Nota: es de suma importancia los rangos de los timestamps. Pues si no se tiene e
 2. Moverse a la carpeta `rcnn`.
 3. Reentrená la CNN usando el retrain dentro de rcnn. Corré el comando:
 ```
-python3 ./cnn/retrain.py --bottleneck_dir=./cnn/bottleneck --model_dir=./cnn/inception --output_graph=./cnn/retrained_graph.pb --output_labels=./cnn/retrained_labels.txt --image_dir ./videos
+python3 ./cnn/retrain.py --bottleneck_dir=./cnn/bottleneck --model_dir=./cnn/inception --output_graph=./cnn/retrained_graph.pb --output_labels=./cnn/retrained_labels.txt --processed_video_dir ./videos
 ```
 4. En el archivo `build_labels.py` , modificar los batches deseados (los videos que se quieren labelear).
 5. Correr el comando `python build_labels.py`.
