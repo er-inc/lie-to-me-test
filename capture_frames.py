@@ -10,6 +10,7 @@ def capture_images(save_folder):
 	
 	if not camera.isOpened():
 		print("Hubo un error y no se pudo iniciar la camara de captura.")
+		return
 	print("La resolucion es de {}x{}".format(camera.get(cv2.CAP_PROP_FRAME_WIDTH), camera.get(cv2.CAP_PROP_FRAME_HEIGHT)))
 	print("El frame count es de {}".format(camera.get(cv2.CAP_PROP_FPS)))
 	print()
@@ -19,9 +20,9 @@ def capture_images(save_folder):
 	print("La resolucion es de {}x{}".format(camera.get(cv2.CAP_PROP_FRAME_WIDTH), camera.get(cv2.CAP_PROP_FRAME_HEIGHT)))
 	print("Se pudo cambiar el frame count a 10: {}".format(camera.set(cv2.CAP_PROP_FPS, 10)))
 	print("El frame count es de {}".format(camera.get(cv2.CAP_PROP_FPS)))
-	
+
 	count = 0
-	
+
 	while(True):
 		# Capture frame-by-frame
 		read_correctly, frame = camera.read()
@@ -37,7 +38,7 @@ def capture_images(save_folder):
 
 		if cv2.waitKey(1) & 0xFF == ord('q'):
 			break
-		
+
 		count += 1
 
 	# When everything done, release the capture
