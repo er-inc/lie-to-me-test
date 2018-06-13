@@ -18,8 +18,8 @@ python3 ./mnist_tutorial/mnist_deep.py
 ## Grabar video
 
 ### Grabar como secuencia de imágenes
-1. Correr `python capture_frames.py --video_dir ./<path_a_carpeta>`.
-Las imágenes van a tener el formato `YYYY-MM-dd hh:mm:ss.ms`
+1. Correr `python3 capture_frames.py --video_dir ./<path_a_carpeta>`.
+Las imágenes van a tener el formato `YYYY-MM-dd hh-mm-ss.ms`
 
 ## Descargar CNN Inception
 Todas las operaciones que hagamos van a usar la red Inception V3 por default, que es uno de los [modelos preentrenados](https://www.tensorflow.org/tutorials/image_recognition) con muchas imágenes.
@@ -28,7 +28,7 @@ Y vamos a reentrenar sólo las últimas capas con lo que nos interesa para nuest
 1. Correr el comando:
 ```
 python3 ./cnn/download_model.py
-	--model_dir=./cnn/inception
+	--model_dir ./cnn/inception
 ```
 
 De todas formas, los pasos que lo necesiten se encargarán de esto.
@@ -45,10 +45,10 @@ Tenés que crear dentro de `cnn/photos` una carpeta por cada categoría que quie
 2. Corré el comando:
 ```
 python3 ./cnn/retrain.py
-	--bottleneck_dir=./cnn/bottleneck
-	--model_dir=./cnn/inception
-	--output_graph=./cnn/retrained_graph.pb
-	--output_labels=./cnn/retrained_labels.txt
+	--bottleneck_dir ./cnn/bottleneck
+	--model_dir ./cnn/inception
+	--output_graph ./cnn/retrained_graph.pb
+	--output_labels ./cnn/retrained_labels.txt
 	--image_dir ./cnn/photos
 ```
 

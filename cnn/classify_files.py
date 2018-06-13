@@ -25,7 +25,6 @@ def classify_images(labels, retrained_graph_path, source):
 			for file in files:
 				frame = cv2.imread(os.path.join(base_dir, file))
 
-
 				# Make the prediction. Big thanks to this SO answer:
 				# http://stackoverflow.com/questions/34484148/feeding-image-data-in-tensorflow-for-transfer-learning
 				predictions = sess.run(softmax_tensor, { 'DecodeJpeg:0': frame })
