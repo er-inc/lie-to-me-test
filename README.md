@@ -1,30 +1,38 @@
 # lie-to-me-test
-Hay que instalar: 
+Hay que instalar:
 - [Python 3](https://algoritmos7540-rw.tk/python)
 - [Tensorflow](https://www.tensorflow.org/install)
 - OpenCV 3: [Windows](https://pypi.python.org/pypi/opencv-python) o [Mac, Linux y RaspberryPi](https://www.pyimagesearch.com/opencv-tutorials-resources-guides/)
 - [Pip](https://pip.pypa.io/en/stable/installing/)
 - Install python dependencies: `pip3 install -r requirements.txt`
+Si tenés una computadora con GPU, primero modificá `requirements.txt`
+para instalar `tensorflow-gpu` en vez de `tensorflow`.
 
 ## MNIST Tutorial
 Para correr los ejemplos del [tutorial de MNIST de Tensorflow](https://www.tensorflow.org/tutorials/layers):
 ```
-python ./mnist_tutorial/mnist_beginner.py
-python ./mnist_tutorial/mnist_deep.py
+python3 ./mnist_tutorial/mnist_beginner.py
+python3 ./mnist_tutorial/mnist_deep.py
 ```
 
 ## Grabar video
 
 ### Grabar como secuencia de imágenes
-1. Modificar en el archivo `capture_frames.py` la carpeta en donde querés que se te guarden las fotos.
-La carpeta **debe existir**.
-2. Correr `capture_frames.py`.
-Las imágenes van a tener el formato `YYYY-MM-dd hh:mm:ss.ms`
+1. Correr `python3 capture_frames.py --video_dir ./<path_a_carpeta>`.
+Las imágenes van a tener el formato `YYYY-MM-dd hh-mm-ss.ms`
 
 ## Descargar CNN Inception
-Todas las operaciones que hagamos van a usar la [red Inception]() ya entrenada con muchas imàgenes.
-Y vamos a reentrenar sòlo las ùltimas capas con lo que nos interesa para nuestro problema.
-... Correr python retrain.py una vez ...   Estaría bueno separarlo   ....
+Todas las operaciones que hagamos van a usar la red Inception V3 por default, que es uno de los [modelos preentrenados](https://www.tensorflow.org/tutorials/image_recognition) con muchas imágenes.
+Y vamos a reentrenar sólo las últimas capas con lo que nos interesa para nuestro problema.
+
+1. Correr el comando:
+```
+python3 ./cnn/download_model.py
+	--model_dir ./cnn/inception
+```
+
+De todas formas, los pasos que lo necesiten se encargarán de esto.
+
 
 ## CNN
 
@@ -36,21 +44,36 @@ Tenés que crear dentro de `cnn/photos` una carpeta por cada categoría que quie
 
 2. Corré el comando:
 ```
-python3 ./cnn/retrain.py --bottleneck_dir=./cnn/bottleneck --model_dir=./cnn/inception --output_graph=./cnn/retrained_graph.pb --output_labels=./cnn/retrained_labels.txt --image_dir ./cnn/photos
+python3 ./cnn/retrain.py
+	--bottleneck_dir ./cnn/bottleneck
+	--model_dir ./cnn/inception
+	--output_graph ./cnn/retrained_graph.pb
+	--output_labels ./cnn/retrained_labels.txt
+	--image_dir ./cnn/photos
 ```
 
 ### Clasificación de imágenes real time
 Clasifica los frames.
 
 1. Reentrená la red
-2. Corré `./cnn/real_time.py`
+2. Corré
+```
+python3 ./cnn/classify_real_time.py
+	--retrained_labels ./cnn/retrained_labels.txt
+	--retrained_graph ./cnn/retrained_graph.pb
+	--data ./cnn/photos
+```
 
 ### Clasificación de imágenes
 Clasifica todas las imágenes en una carpeta.
 
 1. Reentrená la red
-2. Modificá en el archivo `from_file.py` la carpeta en donde están las fotos.
-3. Corré `./cnn/from_file.py` 
+2. Corré:
+```
+python3 ./cnn/classify_files.py
+	--retrained_labels ./cnn/retrained_labels.txt
+	--retrained_graph ./cnn/retrained_graph.pb
+```
 
 
 ## RCNN
@@ -68,14 +91,14 @@ Acá importa para la clasificación cómo van apareciendo las clases y sus tiemp
 ```
 "nombre_del_video": {
 	"clase1": [
-		{ "start":  "YYYY-MM-dd hh:mm:ss.ms",
-		  "end": 	"YYYY-MM-dd hh:mm:ss.ms" },
-		{ "start":  "YYYY-MM-dd hh:mm:ss.ms",
-		  "end": 	"YYYY-MM-dd hh:mm:ss.ms" }
+		{ "start":  "YYYY-MM-dd hh-mm-ss.ms",
+		  "end": 	"YYYY-MM-dd hh-mm-ss.ms" },
+		{ "start":  "YYYY-MM-dd hh-mm-ss.ms",
+		  "end": 	"YYYY-MM-dd hh-mm-ss.ms" }
 	],
 	"clase2": [
-		{ "start":  "YYYY-MM-dd hh:mm:ss.ms",
-		  "end": 	"YYYY-MM-dd hh:mm:ss.ms" }
+		{ "start":  "YYYY-MM-dd hh-mm-ss.ms",
+		  "end": 	"YYYY-MM-dd hh-mm-ss.ms" }
 	]
 }
 ```
@@ -98,7 +121,7 @@ El segundo predice usando los datos del frame anterior de la última capa previa
 Clasifica cada 4 segundos (40 frames), el frame que se está viendo.
 
 1. Reentrená la red
-2. 
+2.
 
 ### Clasificación de un video
 Clasifica los distintos frames del video.
