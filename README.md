@@ -104,17 +104,30 @@ Acá importa para la clasificación cómo van apareciendo las clases y sus tiemp
 ```
 Nota: es de suma importancia los rangos de los timestamps. Pues si no se tiene en cuenta algun frame el mismo va a ser clasificado con clase None.
 
+#### Reentrenar
+
+1. Correr:
+```
+python3 ./rcnn/build_labels.py
+	--videos_dir ./rcnn/videos
+	--classes_file classes
+	--classes_dict class_per_frame
+	--output_labels_dir ./rcnn/data/labeled_frames
+	--copy_dir ./rcnn/data/frames_by_class
+	--videos "dani_01_h" "dani_02_c"
+```
+
+... Continue ...
+0. Reentrenar la CNN.
+
 2. Moverse a la carpeta `rcnn`.
-3. Reentrená la CNN usando el retrain dentro de rcnn. Corré el comando:
-```
-python3 ./retrain_cnn.py --bottleneck_dir=./cnn/bottleneck --model_dir=./cnn/inception --output_graph=./cnn/retrained_graph.pb --output_labels=./cnn/retrained_labels.txt --processed_video_dir ./videos
-```
-4. En el archivo `build_labels.py` , modificar los batches deseados (los videos que se quieren labelear).
-5. Correr el comando `python build_labels.py`.
-6. Modificar en el archivo `rnn_train.py` los batches que se quieren usar para entrenar y si se predijo sin o con pool.
+3. En el archivo `build_labels.py` , modificar los batches deseados (los videos que se quieren labelear).
+4. Correr el comando `python build_labels.py`.
+5. Reentrenar CNN. ... cómo? ...
+5. Modificar en el archivo `rnn_train.py` los batches que se quieren usar para entrenar y si se predijo sin o con pool.
 El primer camino (sin pool) sirve para predecir los datos del training usando sólo el resultado de los frames anteriores.
 El segundo predice usando los datos del frame anterior de la última capa previa a la predicción, dándole más información.
-7. Correr el comando `python rnn_train.py`.
+6. Correr el comando `python rnn_train.py`.
 
 
 ### Clasificación de un video real time
