@@ -35,6 +35,8 @@ De todas formas, los pasos que lo necesiten se encargarán de esto.
 
 
 ## CNN
+Es un red que toma una imagen y la clasifica en una clase,
+mediante capas convolucionales y de pool.
 
 ### Reentrenamiento
 Para reentrenar la última capa de la red Inception con tus propias fotos:
@@ -76,7 +78,11 @@ python3 ./cnn/classify_files.py
 ```
 
 
-## RCNN
+## RNN (o RCNN)
+Es una red que clasifica una imagen en una clase,
+usando información de N frames anteriores además de la actual.
+Por esto sirve para videos o secuencias temporales de imágenes.
+
 
 ### Reentrenamiento
 
@@ -114,16 +120,42 @@ python3 ./rcnn/build_labels.py
 	--classes_dict class_per_frame
 	--output_labels_dir ./rcnn/data/labeled_frames
 	--copy_dir ./rcnn/data/frames_by_class
-	--videos "dani_01_h" "dani_02_c"
+	--videos "video1" "video2" "..."
+```
+Si tiene sólo ciertos videos nuevos, podés correrlo sólo para esos videos y se agregarán a los viejos.
+
+2. Reentrenar la CNN, corriendo:
+```
+python3 ./cnn/retrain.py
+	--bottleneck_dir ./cnn/bottleneck
+	--model_dir ./cnn/inception
+	--output_graph ./rcnn/data/retrained_graph.pb
+	--output_labels ./rcnn/data/retrained_labels.txt
+	--image_dir ./rcnn/data/frames_by_class
+```
+Se va a reentrenar con toda la información que esté en frames_by_class,
+si no se borró nada, va a ser el resultado de todas las corridas hechas a build_labels.
+
+3. Ahora vamos a clasificar nuestros videos con la CNN para guardar
+la información que la CNN saca de ellos para usar en la RNN.
+Para esto hay 2 opciones:
+- Predicción Simple: La RNN usará el resultado final de la CNN,
+para cada frame anterior a analizar.
+
+```
+python3
+
+```
+
+- Predicción Pool: La RNN usará la información de toda la última capa de la CNN,
+para cada frame anterior a analizar.
+
+```
+python3
+
 ```
 
 ... Continue ...
-0. Reentrenar la CNN.
-
-2. Moverse a la carpeta `rcnn`.
-3. En el archivo `build_labels.py` , modificar los batches deseados (los videos que se quieren labelear).
-4. Correr el comando `python build_labels.py`.
-5. Reentrenar CNN. ... cómo? ...
 5. Modificar en el archivo `rnn_train.py` los batches que se quieren usar para entrenar y si se predijo sin o con pool.
 El primer camino (sin pool) sirve para predecir los datos del training usando sólo el resultado de los frames anteriores.
 El segundo predice usando los datos del frame anterior de la última capa previa a la predicción, dándole más información.
