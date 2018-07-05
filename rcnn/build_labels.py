@@ -37,7 +37,8 @@ def label_frames(video_dir, batch, classes, labels_dir, copydir=None):
 
         # Copy it.
         if copydir:
-            copyfile(image, os.path.join(copydir, label, batch, filename))
+            path = os.path.join(copydir, str(label), batch, filename)
+            copyfile(image, path)
 
         # Info.
         classes_counter[label] = classes_counter.get(label, 0) + 1
