@@ -196,8 +196,6 @@ if __name__ == '__main__':
     batches = FLAGS.videos if FLAGS.videos else get_direct_subdirs_in(FLAGS.videos_dir)
     okay = check_expected_dirs_and_files(FLAGS, batches)
     if okay:
-        okay = check_expected_batches(FLAGS.videos_dir, batches)
-        if okay:
-            create_necessary_dirs(FLAGS, batches, class_per_frame)
-            print(f"Processing videos: {batches}")
-            main(batches, FLAGS.videos_dir, FLAGS.cnn_labels, FLAGS.frames_labels_dir, FLAGS.predictions_dir, FLAGS.cnn_graph)
+        create_necessary_dirs(FLAGS, batches, class_per_frame)
+        print(f"Processing videos: {batches}")
+        main(batches, FLAGS.videos_dir, FLAGS.cnn_labels, FLAGS.frames_labels_dir, FLAGS.predictions_dir, FLAGS.cnn_graph)

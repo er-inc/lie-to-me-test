@@ -10,7 +10,7 @@ import argparse
 import os
 import glob
 from shutil import copyfile
-from utils import get_direct_subdirs_in, create_dir_if_not_exists, check_expected_batches
+from utils import get_direct_subdirs_in, create_dir_if_not_exists
 
 def label_frames(video_dir, batch, classes, labels_dir, copydir=None):
     """Label our frames."""
@@ -74,10 +74,15 @@ def create_necessary_dirs(FLAGS, batches, class_per_frame):
                 create_dir_if_not_exists(video_path)
 
 
-def check_expected_dirs_and_files(FLAGS):
+def check_expected_dirs_and_files(FLAGS, batches):
     if not os.path.exists(FLAGS.videos_dir):
         print("Videos directory '" + FLAGS.videos_dir + "' not found.")
         return False
+    for video in batches:
+        path = os.path.join(FLAGS.videos_dir, video)
+        if not os.path.exists(path):
+            print("Video directory '" + path + "' not found.")
+            return False
     classes_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), FLAGS.classes_file + ".py")
     if not os.path.exists(classes_path):
         print("Classes file '" + classes_path + "' not found.")
@@ -149,12 +154,10 @@ if __name__ == '__main__':
 
     class_per_frame = getattr(__import__(FLAGS.classes_file, fromlist=[FLAGS.classes_dict]), FLAGS.classes_dict)
 
-    okay = check_expected_dirs_and_files(FLAGS)
+    batches = FLAGS.videos if FLAGS.videos else get_direct_subdirs_in(FLAGS.videos_dir)
+    okay = check_expected_dirs_and_files(FLAGS, batches)
     if okay:
-        batches = FLAGS.videos if FLAGS.videos else get_direct_subdirs_in(FLAGS.videos_dir)
-        okay = check_expected_batches(FLAGS.videos_dir, batches)
-        if okay:
-            create_necessary_dirs(FLAGS, batches, class_per_frame)
-            print(f"Processing videos: {batches}")
-            for batch in batches:
-                label_frames(FLAGS.videos_dir, batch, class_per_frame[batch], FLAGS.output_labels_dir, copydir=FLAGS.copy_dir)
+        create_necessary_dirs(FLAGS, batches, class_per_frame)
+        print(f"Processing videos: {batches}")
+        for batch in batches:
+            label_frames(FLAGS.videos_dir, batch, class_per_frame[batch], FLAGS.output_labels_dir, copydir=FLAGS.copy_dir)
