@@ -74,7 +74,7 @@ def create_necessary_dirs(FLAGS, batches, class_per_frame):
                 create_dir_if_not_exists(video_path)
 
 
-def check_expected_dirs(FLAGS):
+def check_expected_dirs_and_files(FLAGS):
     if not os.path.exists(FLAGS.videos_dir):
         print("Videos directory '" + FLAGS.videos_dir + "' not found.")
         return False
@@ -149,7 +149,7 @@ if __name__ == '__main__':
 
     class_per_frame = getattr(__import__(FLAGS.classes_file, fromlist=[FLAGS.classes_dict]), FLAGS.classes_dict)
 
-    okay = check_expected_dirs(FLAGS)
+    okay = check_expected_dirs_and_files(FLAGS)
     if okay:
         batches = FLAGS.videos if FLAGS.videos else get_direct_subdirs_in(FLAGS.videos_dir)
         okay = check_expected_batches(FLAGS.videos_dir, batches)

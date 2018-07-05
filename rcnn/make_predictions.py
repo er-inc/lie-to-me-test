@@ -3,9 +3,10 @@ Classify all the images in a holdout set.
 """
 import pickle
 import sys
+import os
 import tensorflow as tf
 from tqdm import tqdm
-from utils import get_direct_subdirs_in, create_dir_if_not_exists, check_expected_batches
+from utils import get_direct_subdirs_in, create_dir_if_not_exists
 
 def get_labels(labels_file):
     """Return a list of our trained labels so we can
@@ -113,13 +114,23 @@ def create_necessary_dirs(FLAGS, batches):
     create_dir_if_not_exists(FLAGS.predictions_dir)
 
 
-def check_expected_dirs_and_files(FLAGS):
+def check_expected_dirs_and_files(FLAGS, batches):
     if not os.path.exists(FLAGS.videos_dir):
         print("Videos directory '" + FLAGS.videos_dir + "' not found.")
         return False
+    for video in batches:
+        path = os.path.join(FLAGS.videos_dir, video)
+        if not os.path.exists(path):
+            print("Video directory '" + path + "' not found.")
+            return False
     if not os.path.exists(FLAGS.frames_labels_dir):
         print("Frames label directory '" + FLAGS.frames_labels_dir + "' not found.")
         return False
+    for video in batches:
+        path = os.path.join(FLAGS.frames_labels_dir, f"labeled-frames-{video}.pkl")
+        if not os.path.exists(path):
+            print("Frame label file '" + path + "' not found.")
+            return False
     if not os.path.exists(FLAGS.cnn_labels):
         print("CNN labels file '" + FLAGS.cnn_labels + "' not found.")
         return False
@@ -182,9 +193,9 @@ if __name__ == '__main__':
     )
     FLAGS, unparsed = parser.parse_known_args()
 
-    okay = check_expected_dirs_and_files(FLAGS)
+    batches = FLAGS.videos if FLAGS.videos else get_direct_subdirs_in(FLAGS.videos_dir)
+    okay = check_expected_dirs_and_files(FLAGS, batches)
     if okay:
-        batches = FLAGS.videos if FLAGS.videos else get_direct_subdirs_in(FLAGS.videos_dir)
         okay = check_expected_batches(FLAGS.videos_dir, batches)
         if okay:
             create_necessary_dirs(FLAGS, batches, class_per_frame)

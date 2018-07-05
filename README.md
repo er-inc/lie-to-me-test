@@ -165,12 +165,16 @@ para cada frame anterior a analizar.
 		--videos "video1" "video2" "..."
 	```
 
-... Continue ...
-5. Modificar en el archivo `rnn_train.py` los batches que se quieren usar para entrenar y si se predijo sin o con pool.
-El primer camino (sin pool) sirve para predecir los datos del training usando sólo el resultado de los frames anteriores.
-El segundo predice usando los datos del frame anterior de la última capa previa a la predicción, dándole más información.
-6. Correr el comando `python rnn_train.py`.
+4. Reentrenar la red, corriendo lo siguiente.
+Agregar el flag `-pool` solamente si en el paso anterior se usó la **Predicción Pool**.
 
+```
+python3 ./rcnn/rnn_train.py
+	[-pool]
+	--predictions_dir ./rcnn/data/predictions
+	--output_model ./rcnn/data/rnn.tflearn
+	--videos "video1" "video2" "..."
+```
 
 ### Clasificación de un video real time
 Clasifica cada 4 segundos (40 frames), el frame que se está viendo.

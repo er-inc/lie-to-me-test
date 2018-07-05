@@ -9,8 +9,9 @@ before putting in the work required to do so.
 import tensorflow as tf, sys
 import pickle
 import sys
+import os
 from tqdm import tqdm
-from utils import get_direct_subdirs_in, create_dir_if_not_exists, check_expected_batches
+from utils import get_direct_subdirs_in, create_dir_if_not_exists
 
 def predict_on_frames(cnn_graph, frames, videos_dir, batch):
     # Unpersists graph from file
@@ -78,19 +79,51 @@ def main(batches, videos_dir, frames_labels_dir, predictions_dir, cnn_graph):
 
     print("Done.")
 
-def create_necessary_dirs(FLAGS, batches):
+def create_necessary_dirs(FLAGS):
     create_dir_if_not_exists(FLAGS.predictions_dir)
 
-def check_expected_dirs_and_files(FLAGS):
+def check_expected_dirs_and_files(FLAGS, batches):
     if not os.path.exists(FLAGS.videos_dir):
         print("Videos directory '" + FLAGS.videos_dir + "' not found.")
         return False
+    for video in batches:
+        path = os.path.join(FLAGS.videos_dir, video)
+        if not os.path.exists(path):
+            print("Video directory '" + path + "' not found.")
+            return False
     if not os.path.exists(FLAGS.frames_labels_dir):
         print("Frames label directory '" + FLAGS.frames_labels_dir + "' not found.")
         return False
+    for video in batches:
+        path = os.path.join(FLAGS.frames_labels_dir, f"labeled-frames-{video}.pkl")
+        if not os.path.exists(path):
+            print("Frame label file '" + path + "' not found.")
+            return False
     if not os.path.exists(FLAGS.cnn_labels):
         print("CNN labels file '" + FLAGS.cnn_labels + "' not found.")
         return False
+    if not os.path.exists(FLAGS.cnn_graph):
+        print("CNN graph file '" + FLAGS.cnn_graph + "' not found.")
+        return False
+    return True
+
+def check_expected_dirs_and_files(FLAGS, batches):
+    if not os.path.exists(FLAGS.videos_dir):
+        print("Videos directory '" + FLAGS.videos_dir + "' not found.")
+        return False
+    for video in batches:
+        path = os.path.join(FLAGS.videos_dir, video)
+        if not os.path.exists(path):
+            print("Video directory '" + path + "' not found.")
+            return False
+    if not os.path.exists(FLAGS.frames_labels_dir):
+        print("Frames label directory '" + FLAGS.frames_labels_dir + "' not found.")
+        return False
+    for video in batches:
+        path = os.path.join(FLAGS.frames_labels_dir, f"labeled-frames-{video}.pkl")
+        if not os.path.exists(path):
+            print("Frame label file '" + path + "' not found.")
+            return False
     if not os.path.exists(FLAGS.cnn_graph):
         print("CNN graph file '" + FLAGS.cnn_graph + "' not found.")
         return False
@@ -142,11 +175,9 @@ if __name__ == '__main__':
         )
         FLAGS, unparsed = parser.parse_known_args()
 
-        okay = check_expected_dirs_and_files(FLAGS)
+        batches = FLAGS.videos if FLAGS.videos else get_direct_subdirs_in(FLAGS.videos_dir)
+        okay = check_expected_dirs_and_files(FLAGS, batches)
         if okay:
-            batches = FLAGS.videos if FLAGS.videos else get_direct_subdirs_in(FLAGS.videos_dir)
-            okay = check_expected_batches(FLAGS.videos_dir, batches)
-            if okay:
-                create_necessary_dirs(FLAGS, batches, class_per_frame)
-                print(f"Processing videos: {batches}")
-                main(batches, FLAGS.videos_dir, FLAGS.frames_labels_dir, FLAGS.predictions_dir, FLAGS.cnn_graph)
+            create_necessary_dirs(FLAGS)
+            print(f"Processing videos: {batches}")
+            main(batches, FLAGS.videos_dir, FLAGS.frames_labels_dir, FLAGS.predictions_dir, FLAGS.cnn_graph)
