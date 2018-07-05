@@ -163,10 +163,16 @@ def create_image_lists(image_dir, testing_percentage, validation_percentage):
     tf.logging.info("Looking for images in '" + dir_name + "'")
     for extension in extensions:
       file_glob = os.path.join(image_dir, dir_name, '*.' + extension)
+      # Not working for Windows:
+      # https://github.com/tensorflow/tensorflow/issues/20557
+      # https://github.com/tensorflow/tensorflow/issues/20559
       file_list.extend(gfile.Glob(file_glob))
+      print(f"File List for EXTENSION: {extension}, has count {len(gfile.Glob(file_glob))}")
+    print(f"Total File List for '{os.path.join(image_dir, dir_name)}' has count {len(file_list)}")
     if not file_list:
       tf.logging.warning('No files found')
       continue
+    print(f"First file: {file_list[0]}")
     if len(file_list) < 20:
       tf.logging.warning(
           'WARNING: Folder has less than 20 images, which may cause issues.')
@@ -337,7 +343,7 @@ def create_bottleneck_file(bottleneck_path, image_lists, label_name, index,
                            bottleneck_tensor):
   """Create a single bottleneck file."""
   tf.logging.info('Creating bottleneck at ' + bottleneck_path)
-  image_path = get_image_path(image_lists, label_name, index,
+  image_path = get_image_path(image_lists, label_name, index,   ####
                               image_dir, category)
   if not gfile.Exists(image_path):
     tf.logging.fatal('File does not exist %s', image_path)
