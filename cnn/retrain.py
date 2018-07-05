@@ -106,7 +106,6 @@ import re
 import sys
 
 import numpy as np
-from six.moves import urllib
 import tensorflow as tf
 
 from tensorflow.contrib.quantize.python import quant_ops
@@ -877,9 +876,8 @@ def main(_):
     return -1
 
   # Set up the pre-trained graph.
-  maybe_download_and_extract(model_info['data_url'])
-  graph, bottleneck_tensor, resized_image_tensor = (
-      create_model_graph(model_info))
+  maybe_download_and_extract(model_info['data_url'], FLAGS.model_dir)
+  graph, bottleneck_tensor, resized_image_tensor = create_model_graph(model_info)
 
   # Look at the folder structure, and create lists of all the images.
   image_lists = create_image_lists(FLAGS.image_dir, FLAGS.testing_percentage,
