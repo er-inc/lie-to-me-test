@@ -4,8 +4,10 @@ Hay que instalar:
 - [Tensorflow](https://www.tensorflow.org/install)
 - OpenCV 3: [Windows](https://pypi.python.org/pypi/opencv-python) o [Mac, Linux y RaspberryPi](https://www.pyimagesearch.com/opencv-tutorials-resources-guides/)
 - [Pip](https://pip.pypa.io/en/stable/installing/)
-- Install python dependencies: `pip3 install -r requirements.txt`
-Si tenés una computadora con GPU, primero modificá `requirements.txt`
+
+- Instalar las dependencias: `pip3 install -r requirements.txt`
+
+	Si tenés una computadora con GPU, primero modificá `requirements.txt`
 para instalar `tensorflow-gpu` en vez de `tensorflow`.
 
 ## MNIST Tutorial
@@ -32,7 +34,7 @@ python3 ./cnn/download_model.py
 	--model_dir ./cnn/inception
 ```
 
-De todas formas, los pasos que lo necesiten se encargarán de esto.
+(De todas formas, los siguientes scripts se encargarán de descargarlo de ser necesario.)
 
 
 ## CNN
@@ -166,8 +168,8 @@ para cada frame anterior a analizar.
 	```
 
 4. Reentrenar la red, corriendo lo siguiente.
-Agregar el flag `-pool` solamente si en el paso anterior se usó la **Predicción Pool**.
 
+	Agregar el flag `-pool` solamente si en el paso anterior se usó la **Predicción Pool**.
 ```
 python3 ./rcnn/rnn_train.py
 	[-pool]
@@ -186,5 +188,4 @@ Clasifica cada 4 segundos (40 frames), el frame que se está viendo.
 Clasifica los distintos frames del video.
 
 1. Reentrená la red
-2. En el archivo `make_predictions.py` o `make_predictions_pool.py` modificar los batches que se quieren predecir.
-3. Correr el comando `python make_predictions.py` o `python make_predictions_pool.py` correspondientemente, según lo elegido en el paso 5 del reentrnamiento.
+2. 
