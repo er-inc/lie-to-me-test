@@ -19,6 +19,7 @@ python3 ./mnist_tutorial/mnist_deep.py
 
 ### Grabar como secuencia de imágenes
 1. Correr `python3 capture_frames.py --video_dir ./<path_a_carpeta>`.
+
 Las imágenes van a tener el formato `YYYY-MM-dd hh-mm-ss.ms`
 
 ## Descargar CNN Inception
@@ -139,21 +140,30 @@ si no se borró nada, va a ser el resultado de todas las corridas hechas a build
 3. Ahora vamos a clasificar nuestros videos con la CNN para guardar
 la información que la CNN saca de ellos para usar en la RNN.
 Para esto hay 2 opciones:
-- Predicción Simple: La RNN usará el resultado final de la CNN,
+
+    - **Predicción Simple:** La RNN usará el resultado final de la CNN,
 para cada frame anterior a analizar.
 
-```
-python3
+	```
+	python3 ./rcnn/make_predictions.py
+		--frames_labels_dir ./rcnn/data/labeled_frames
+		--cnn_labels ./rcnn/data/retrained_labels.txt
+		--cnn_graph ./rcnn/data/retrained_graph.pb
+		--predictions_dir ./rcnn/data/predictions
+		--videos_dir ./rcnn/videos
+		--videos "video1" "video2" "..."
+	```
 
-```
+    - **Predicción Pool:** La RNN usará la información de toda la última capa de la CNN, para cada frame anterior a analizar.
 
-- Predicción Pool: La RNN usará la información de toda la última capa de la CNN,
-para cada frame anterior a analizar.
-
-```
-python3
-
-```
+	```
+	python3 ./rcnn/make_predictions_pool.py
+		--frames_labels_dir ./rcnn/data/labeled_frames
+		--cnn_graph ./rcnn/data/retrained_graph.pb
+		--predictions_dir ./rcnn/data/predictions
+		--videos_dir ./rcnn/videos
+		--videos "video1" "video2" "..."
+	```
 
 ... Continue ...
 5. Modificar en el archivo `rnn_train.py` los batches que se quieren usar para entrenar y si se predijo sin o con pool.

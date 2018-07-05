@@ -10,7 +10,7 @@ import argparse
 import os
 import glob
 from shutil import copyfile
-from utils import get_direct_subdirs_in, create_dir_if_not_exists
+from utils import get_direct_subdirs_in, create_dir_if_not_exists, check_expected_batches
 
 def label_frames(video_dir, batch, classes, labels_dir, copydir=None):
     """Label our frames."""
@@ -84,13 +84,6 @@ def check_expected_dirs(FLAGS):
         return False
     return True
 
-def check_expected_batches(FLAGS, batches):
-    for video in batches:
-        if not os.path.exists(os.path.join(FLAGS.videos_dir, video)):
-            print("Video '" + video + "' not found.")
-            return False
-    return True
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -159,7 +152,7 @@ if __name__ == '__main__':
     okay = check_expected_dirs(FLAGS)
     if okay:
         batches = FLAGS.videos if FLAGS.videos else get_direct_subdirs_in(FLAGS.videos_dir)
-        okay = check_expected_batches(FLAGS, batches)
+        okay = check_expected_batches(FLAGS.videos_dir, batches)
         if okay:
             create_necessary_dirs(FLAGS, batches, class_per_frame)
             print(f"Processing videos: {batches}")
