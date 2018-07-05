@@ -104,6 +104,7 @@ import os.path
 import random
 import re
 import sys
+import os
 
 import numpy as np
 import tensorflow as tf
@@ -142,11 +143,12 @@ def create_image_lists(image_dir, testing_percentage, validation_percentage):
     A dictionary containing an entry for each label subfolder, with images split
     into training, testing, and validation sets within each label.
   """
-  if not gfile.Exists(image_dir):
+  if not os.path.exists(image_dir):
     tf.logging.error("Image directory '" + image_dir + "' not found.")
     return None
   result = {}
   sub_dirs = [x[0] for x in gfile.Walk(image_dir)]
+  print("SUUUB DIIIRS", sub_dirs)
   # The root directory comes first, so skip it.
   is_root_dir = True
   for sub_dir in sub_dirs:
@@ -155,8 +157,8 @@ def create_image_lists(image_dir, testing_percentage, validation_percentage):
       continue
     extensions = ['jpg', 'jpeg', 'JPG', 'JPEG']
     file_list = []
-    dir_name = os.path.basename(sub_dir)
-    if dir_name == image_dir:
+    dir_name = sub_dir.replace(image_dir, "").lstrip("/\\")
+    if dir_name == "":
       continue
     tf.logging.info("Looking for images in '" + dir_name + "'")
     for extension in extensions:
