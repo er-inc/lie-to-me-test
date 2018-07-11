@@ -123,7 +123,7 @@ python3 ./rcnn/build_labels.py
 	--classes_dict class_per_frame
 	--output_labels_dir ./rcnn/data/labeled_frames
 	--copy_dir ./rcnn/data/frames_by_class
-	--videos "video1" "video2" "..."
+	[--videos "video1" "video2" "..."]
 ```
 Si tiene sólo ciertos videos nuevos, podés correrlo sólo para esos videos y se agregarán a los viejos.
 
@@ -153,7 +153,7 @@ para cada frame anterior a analizar.
 		--cnn_graph ./rcnn/data/retrained_graph.pb
 		--predictions_dir ./rcnn/data/predictions
 		--videos_dir ./rcnn/videos
-		--videos "video1" "video2" "..."
+		[--videos "video1" "video2" "..."]
 	```
 
     - **Predicción Pool:** La RNN usará la información de toda la última capa de la CNN, para cada frame anterior a analizar.
@@ -164,7 +164,7 @@ para cada frame anterior a analizar.
 		--cnn_graph ./rcnn/data/retrained_graph.pb
 		--predictions_dir ./rcnn/data/predictions
 		--videos_dir ./rcnn/videos
-		--videos "video1" "video2" "..."
+		[--videos "video1" "video2" "..."]
 	```
 
 4. Reentrenar la red, corriendo lo siguiente.
@@ -175,7 +175,7 @@ python3 ./rcnn/rnn_train.py
 	[-pool]
 	--predictions_dir ./rcnn/data/predictions
 	--output_model ./rcnn/data/rnn.tflearn
-	--videos "video1" "video2" "..."
+	[--videos "video1" "video2" "..."]
 ```
 
 ### Clasificación de un video real time

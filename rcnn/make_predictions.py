@@ -4,6 +4,7 @@ Classify all the images in a holdout set.
 import pickle
 import sys
 import os
+import argparse
 import tensorflow as tf
 from tqdm import tqdm
 from utils import get_direct_subdirs_in, create_dir_if_not_exists
@@ -105,7 +106,7 @@ def main(batches, videos_dir, cnn_labels, frames_labels_dir, predictions_dir, cn
 
         # Save it.
         path = os.path.join(predictions_dir, f"predicted-frames-{batch}.pkl")
-        with open(path', 'wb') as fout:
+        with open(path, 'wb') as fout:
             pickle.dump(predictions, fout)
 
     print("Done.")
@@ -193,9 +194,11 @@ if __name__ == '__main__':
     )
     FLAGS, unparsed = parser.parse_known_args()
 
+    print("flags videos: ", FLAGS.videos)
+    print("subdirs: ", get_direct_subdirs_in(FLAGS.videos_dir))
     batches = FLAGS.videos if FLAGS.videos else get_direct_subdirs_in(FLAGS.videos_dir)
     okay = check_expected_dirs_and_files(FLAGS, batches)
     if okay:
-        create_necessary_dirs(FLAGS, batches, class_per_frame)
+        create_necessary_dirs(FLAGS, batches)
         print(f"Processing videos: {batches}")
         main(batches, FLAGS.videos_dir, FLAGS.cnn_labels, FLAGS.frames_labels_dir, FLAGS.predictions_dir, FLAGS.cnn_graph)
