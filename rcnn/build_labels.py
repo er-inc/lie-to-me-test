@@ -74,7 +74,6 @@ def create_necessary_dirs(FLAGS, batches, class_per_frame):
                 create_dir_if_not_exists(class_path)
                 create_dir_if_not_exists(video_path)
 
-
 def check_expected_dirs_and_files(FLAGS, batches):
     if not os.path.exists(FLAGS.videos_dir):
         print("Videos directory '" + FLAGS.videos_dir + "' not found.")
