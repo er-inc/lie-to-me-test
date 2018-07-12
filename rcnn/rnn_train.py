@@ -23,6 +23,10 @@ def main(filename, frames, batch_size, num_classes, input_length, output_model):
     net = get_network_wide(frames, input_length, num_classes)
 
     # Train the model.
+    print(f"Y_TEST[0]: {y_test[0]}")
+    print(f"Y_TEST[0] tipo: {type(y_test[0])}, shape: {y_test[0].shape}")
+
+    input()
     model = tflearn.DNN(net, tensorboard_verbose=0)
     model.fit(X_train, y_train, validation_set=(X_test, y_test),
               show_metric=True, batch_size=batch_size, snapshot_step=100,

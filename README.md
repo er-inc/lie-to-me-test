@@ -182,10 +182,38 @@ python3 ./rcnn/rnn_train.py
 Clasifica cada 4 segundos (40 frames), el frame que se está viendo.
 
 1. Reentrená la red
-2.
+2. 
 
 ### Clasificación de un video
 Clasifica los distintos frames del video.
 
 1. Reentrená la red
-2. 
+2. Grabá tu video con:
+```
+python3 capture_frames.py --video_dir ./test/videos/<tu_video>
+```
+3. Corré:
+```
+python3 ./rcnn/build_labels.py
+	--videos_dir ./test/videos
+	--classes_file classes
+	--classes_dict class_per_frame
+	--output_labels_dir ./test/data/labeled_frames
+	--copy_dir ./test/data/frames_by_class
+	--videos "<tu_video>"
+```
+4. Corré:
+```
+python3 ./rcnn/make_predictions.py
+	--frames_labels_dir ./test/data/labeled_frames
+	--cnn_labels ./rcnn/data/retrained_labels.txt
+	--cnn_graph ./rcnn/data/cnn_retrained_graph.pb
+	--predictions_dir ./test/data/ccn_predictions
+	--videos_dir ./test
+	--videos "<tu_video>"
+```
+o la otra..
+5. Corré:
+```
+python3 ./rcnn/rnn_eval.py
+```
