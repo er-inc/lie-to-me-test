@@ -132,7 +132,7 @@ Si tiene sólo ciertos videos nuevos, podés correrlo sólo para esos videos y s
 python3 ./cnn/retrain.py
 	--bottleneck_dir ./cnn/bottleneck
 	--model_dir ./cnn/inception
-	--output_graph ./rcnn/data/retrained_graph.pb
+	--output_graph ./rcnn/data/cnn_retrained_graph.pb
 	--output_labels ./rcnn/data/retrained_labels.txt
 	--image_dir ./rcnn/data/frames_by_class
 ```
@@ -150,8 +150,8 @@ para cada frame anterior a analizar.
 	python3 ./rcnn/make_predictions.py
 		--frames_labels_dir ./rcnn/data/labeled_frames
 		--cnn_labels ./rcnn/data/retrained_labels.txt
-		--cnn_graph ./rcnn/data/retrained_graph.pb
-		--predictions_dir ./rcnn/data/predictions
+		--cnn_graph ./rcnn/data/cnn_retrained_graph.pb
+		--predictions_dir ./rcnn/data/ccn_predictions
 		--videos_dir ./rcnn/videos
 		[--videos "video1" "video2" "..."]
 	```
@@ -162,7 +162,7 @@ para cada frame anterior a analizar.
 	python3 ./rcnn/make_predictions_pool.py
 		--frames_labels_dir ./rcnn/data/labeled_frames
 		--cnn_graph ./rcnn/data/retrained_graph.pb
-		--predictions_dir ./rcnn/data/predictions
+		--predictions_dir ./rcnn/data/cnn_predictions
 		--videos_dir ./rcnn/videos
 		[--videos "video1" "video2" "..."]
 	```
@@ -173,7 +173,7 @@ para cada frame anterior a analizar.
 ```
 python3 ./rcnn/rnn_train.py
 	[-pool]
-	--predictions_dir ./rcnn/data/predictions
+	--predictions_dir ./rcnn/data/cnn_predictions
 	--output_model ./rcnn/data/rnn.tflearn
 	[--videos "video1" "video2" "..."]
 ```

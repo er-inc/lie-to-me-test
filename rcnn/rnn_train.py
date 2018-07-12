@@ -8,6 +8,7 @@ import argparse
 import os
 import re
 from tensorflow.python.platform import gfile
+from tensorflow import reset_default_graph
 from utils import get_direct_subdirs_in, create_dir_if_not_exists
 
 def main(filename, frames, batch_size, num_classes, input_length, output_model):
@@ -116,6 +117,7 @@ if __name__ == '__main__':
         create_necessary_dirs(FLAGS, batches)
         print(f"Processing videos: {batches}")
         for video in batches:
-            filename = os.path.join(FLAGS.predictions_dir, filename.format(video))
+            file = os.path.join(FLAGS.predictions_dir, filename.format(video))
             print("Doing batch %s" % video)
-            main(filename, FLAGS.before_frames, FLAGS.batch_size, len(get_classes()), input_length, FLAGS.output_model)
+            reset_default_graph()
+            main(file, FLAGS.before_frames, FLAGS.batch_size, len(get_classes()), input_length, FLAGS.output_model)

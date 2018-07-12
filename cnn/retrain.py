@@ -127,7 +127,7 @@ FLAGS = None
 MAX_NUM_IMAGES_PER_CLASS = 2 ** 27 - 1  # ~134M
 
 
-def create_image_lists(image_dir, testing_percentage, validation_percentage):
+def create_image_lists(image_dir, testing_percentage, validation_percentage):  #ACAAAA
   """Builds a list of training images from the file system.
 
   Analyzes the sub folders in the image directory, splits them into stable
@@ -148,13 +148,8 @@ def create_image_lists(image_dir, testing_percentage, validation_percentage):
     return None
   result = {}
   sub_dirs = [x[0] for x in gfile.Walk(image_dir)]
-  print("SUUUB DIIIRS", sub_dirs)
-  # The root directory comes first, so skip it.
-  is_root_dir = True
+  sub_dirs.pop(0) # The root directory comes first, so skip it.
   for sub_dir in sub_dirs:
-    if is_root_dir:
-      is_root_dir = False
-      continue
     extensions = ['jpg', 'jpeg', 'JPG', 'JPEG']
     file_list = []
     dir_name = sub_dir.replace(image_dir, "").lstrip("/\\")
@@ -180,7 +175,7 @@ def create_image_lists(image_dir, testing_percentage, validation_percentage):
       tf.logging.warning(
           'WARNING: Folder {} has more than {} images. Some images will '
           'never be selected.'.format(dir_name, MAX_NUM_IMAGES_PER_CLASS))
-    label_name = re.sub(r'[^a-z0-9]+', ' ', dir_name.lower())
+    label_name = re.sub(r'[^a-zA-Z0-9]+', ' ', dir_name).split()[0]
     training_images = []
     testing_images = []
     validation_images = []
@@ -888,7 +883,7 @@ def main(_):
   graph, bottleneck_tensor, resized_image_tensor = create_model_graph(model_info)
 
   # Look at the folder structure, and create lists of all the images.
-  image_lists = create_image_lists(FLAGS.image_dir, FLAGS.testing_percentage,
+  image_lists = create_image_lists(FLAGS.image_dir, FLAGS.testing_percentage, ########## ACA
                                    FLAGS.validation_percentage)
   class_count = len(image_lists.keys())
   if class_count == 0:
@@ -1041,7 +1036,7 @@ def main(_):
     # constants.
     save_graph_to_file(sess, graph, FLAGS.output_graph)
     with gfile.FastGFile(FLAGS.output_labels, 'w') as f:
-      f.write('\n'.join(image_lists.keys()) + '\n')
+      f.write('\n'.join(image_lists.keys()) + '\n') ####################ACAAAAA
 
 
 if __name__ == '__main__':

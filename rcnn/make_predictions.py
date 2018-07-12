@@ -194,8 +194,6 @@ if __name__ == '__main__':
     )
     FLAGS, unparsed = parser.parse_known_args()
 
-    print("flags videos: ", FLAGS.videos)
-    print("subdirs: ", get_direct_subdirs_in(FLAGS.videos_dir))
     batches = FLAGS.videos if FLAGS.videos else get_direct_subdirs_in(FLAGS.videos_dir)
     okay = check_expected_dirs_and_files(FLAGS, batches)
     if okay:
