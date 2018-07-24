@@ -24,3 +24,7 @@ rcnn/cnn/*
 
 test/
 test/*/*
+
+# Dependencies
+rcnn/src/
+rcnn/src/*/*
