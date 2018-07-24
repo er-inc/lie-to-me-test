@@ -2,6 +2,7 @@ import os.path
 import sys
 import tarfile
 import argparse
+from six.moves import urllib
 
 from utils import create_model_info
 
@@ -32,8 +33,7 @@ def maybe_download_and_extract(data_url, model_dir):
     filepath, _ = urllib.request.urlretrieve(data_url, filepath, _progress)
     print()
     statinfo = os.stat(filepath)
-    tf.logging.info('Successfully downloaded', filename, statinfo.st_size,
-                    'bytes.')
+    print(f"Successfully downloaded {filename}: {statinfo.st_size} bytes.")
     print('Extracting file from ', filepath)
     tarfile.open(filepath, 'r:gz').extractall(dest_directory)
   else:

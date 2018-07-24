@@ -20,11 +20,16 @@ def get_data(filename, num_frames, num_classes, input_length):
     y = []
     temp_list = deque()
 
+    classes = get_classes()
+
     # Open and get the features.
     with open(filename, 'rb') as fin:
         frames = pickle.load(fin)
 
-        for i, frame in enumerate(frames):
+        print(f"Frames {len(frames)}")
+        print(f"Frame tipo: {frames[0]}")
+
+        for frame in frames:
             features = frame[0]
             actual = frame[1]
 
@@ -33,7 +38,7 @@ def get_data(filename, num_frames, num_classes, input_length):
                 temp_list.append(features)
                 flat = list(temp_list)
                 X.append(np.array(flat))
-                y.append(get_classes().index(actual)) # Convert our labels into integer.
+                y.append(classes.index(actual)) # Convert our labels into integer.
                 temp_list.popleft()
             else:
                 temp_list.append(features)
@@ -45,15 +50,20 @@ def get_data(filename, num_frames, num_classes, input_length):
     X = np.array(X)
     y = np.array(y)
 
+    print(f"X {X.shape}")
+    print(f"y {y.shape}")
+
     # Reshape.
     X = X.reshape(-1, num_frames, input_length)
 
     # One-hot encoded categoricals.
     y = to_categorical(y, num_classes)
 
+    print(f"X {X.shape}")
+    print(f"y {y.shape}")
+
     # Split into train and test.
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.1, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
 
     return X_train, X_test, y_train, y_test
 

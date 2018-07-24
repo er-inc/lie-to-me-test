@@ -3,23 +3,26 @@ Classify all the images in a holdout set.
 """
 import pickle
 import sys
+import os
+import argparse
 import tensorflow as tf
 from tqdm import tqdm
+from utils import get_direct_subdirs_in, create_dir_if_not_exists
 
-def get_labels():
+def get_labels(labels_file):
     """Return a list of our trained labels so we can
     test our training accuracy. The file is in the
     format of one label per line, in the same order
     as the predictions are made. The order can change
     between training runs."""
-    with open("./inception/retrained_labels.txt", 'r') as fin:
+    with open(labels_file, 'r') as fin:
         labels = [line.rstrip('\n') for line in fin]
     return labels
 
-def predict_on_frames(frames, batch):
+def predict_on_frames(cnn_graph, frames, videos_dir, batch):
     """Given a list of frames, predict all their classes."""
     # Unpersists graph from file
-    with tf.gfile.FastGFile("./inception/retrained_graph.pb", 'rb') as fin:
+    with tf.gfile.FastGFile(cnn_graph, 'rb') as fin:
         graph_def = tf.GraphDef()
         graph_def.ParseFromString(fin.read())
         _ = tf.import_graph_def(graph_def, name='')
@@ -28,14 +31,14 @@ def predict_on_frames(frames, batch):
         softmax_tensor = sess.graph.get_tensor_by_name('final_result:0')
 
         frame_predictions = []
-        image_path = 'images/' + batch + '/'
+        video_path = os.path.join(FLAGS.videos_dir, batch)
         pbar = tqdm(total=len(frames))
         for i, frame in enumerate(frames):
             filename = frame[0]
             label = frame[1]
 
             # Get the image path.
-            image = image_path + filename + '.jpg'
+            image = os.path.join(video_path, filename + '.jpg')
 
             # Read in the image_data
             image_data = tf.gfile.FastGFile(image, 'rb').read()
@@ -86,24 +89,114 @@ def get_accuracy(predictions, labels):
     accuracy = correct / len(predictions)
     return accuracy
 
-def main(batches):
-    labels = get_labels()
+def main(batches, videos_dir, cnn_labels, frames_labels_dir, predictions_dir, cnn_graph):
+    labels = get_labels(cnn_labels)
 
     for batch in batches:
         print("Doing batch %s" % batch)
-        with open('data/labeled-frames-' + batch + '.pkl', 'rb') as fin:
+
+        path = os.path.join(frames_labels_dir, f"labeled-frames-{batch}.pkl")
+        with open(path, 'rb') as fin:
             frames = pickle.load(fin)
 
         # Predict on this batch and get the accuracy.
-        predictions = predict_on_frames(frames, batch)
+        predictions = predict_on_frames(cnn_graph, frames, videos_dir, batch)
         accuracy = get_accuracy(predictions, labels)
         print("Batch accuracy: %.5f" % accuracy)
 
         # Save it.
-        with open('data/predicted-frames-' + batch + '.pkl', 'wb') as fout:
+        path = os.path.join(predictions_dir, f"predicted-frames-{batch}.pkl")
+        with open(path, 'wb') as fout:
             pickle.dump(predictions, fout)
 
     print("Done.")
 
+def create_necessary_dirs(FLAGS, batches):
+    create_dir_if_not_exists(FLAGS.predictions_dir)
+
+
+def check_expected_dirs_and_files(FLAGS, batches):
+    if not os.path.exists(FLAGS.videos_dir):
+        print("Videos directory '" + FLAGS.videos_dir + "' not found.")
+        return False
+    for video in batches:
+        path = os.path.join(FLAGS.videos_dir, video)
+        if not os.path.exists(path):
+            print("Video directory '" + path + "' not found.")
+            return False
+    if not os.path.exists(FLAGS.frames_labels_dir):
+        print("Frames label directory '" + FLAGS.frames_labels_dir + "' not found.")
+        return False
+    for video in batches:
+        path = os.path.join(FLAGS.frames_labels_dir, f"labeled-frames-{video}.pkl")
+        if not os.path.exists(path):
+            print("Frame label file '" + path + "' not found.")
+            return False
+    if not os.path.exists(FLAGS.cnn_labels):
+        print("CNN labels file '" + FLAGS.cnn_labels + "' not found.")
+        return False
+    if not os.path.exists(FLAGS.cnn_graph):
+        print("CNN graph file '" + FLAGS.cnn_graph + "' not found.")
+        return False
+    return True
+
 if __name__ == '__main__':
-    main(['fede_01_h', 'fede_02_c', 'dani_01_h', 'dani_02_c'])
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+		'--frames_labels_dir',
+		type=str,
+		default='/tmp/output_labels',
+		help="""\
+		Where to find the files for information on
+        the label/class each frame of each video has.\
+		"""
+	)
+    parser.add_argument(
+		'--cnn_labels',
+		type=str,
+		default='/tmp/output_labels.txt',
+		help="""\
+		Where to find the CNN trained graph\'s labels.\
+		"""
+	)
+    parser.add_argument(
+        '--cnn_graph',
+        type=str,
+        default='/tmp/output_graph.pb',
+        help='Where to find the CNN trained graph.'
+    )
+    parser.add_argument(
+        '--predictions_dir',
+        type=str,
+        default='/tmp/data/predictions',
+        help="""\
+        Where to save the CNN predictions data.\
+        """
+    )
+    parser.add_argument(
+        '--videos_dir',
+        type=str,
+        default='/tmp/videos',
+        help="""\
+        Where to find the recorded videos.\
+        """
+    )
+    parser.add_argument(
+        '--videos',
+        type=str,
+        nargs='+',
+        default=None,
+        help="""\
+        Specific videos to process.
+        If none is provided, all in the video heriarchy
+        will be processed.\
+        """
+    )
+    FLAGS, unparsed = parser.parse_known_args()
+
+    batches = FLAGS.videos if FLAGS.videos else get_direct_subdirs_in(FLAGS.videos_dir)
+    okay = check_expected_dirs_and_files(FLAGS, batches)
+    if okay:
+        create_necessary_dirs(FLAGS, batches)
+        print(f"Processing videos: {batches}")
+        main(batches, FLAGS.videos_dir, FLAGS.cnn_labels, FLAGS.frames_labels_dir, FLAGS.predictions_dir, FLAGS.cnn_graph)

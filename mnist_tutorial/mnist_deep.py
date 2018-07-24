@@ -22,10 +22,6 @@ https://www.tensorflow.org/get_started/mnist/pros
 # pylint: disable=invalid-name
 # pylint: disable=g-bad-import-order
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import argparse
 import sys
 import tempfile
@@ -174,4 +170,3 @@ if __name__ == '__main__':
                       help='Directory for storing input data')
   FLAGS, unparsed = parser.parse_known_args()
   tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
-  

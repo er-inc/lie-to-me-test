@@ -11,6 +11,7 @@ __pycache__/*
 # Data
 cnn/photos/*
 rcnn/videos/*
+rcnn/data/*
 *.zip
 */*.zip
 

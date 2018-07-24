@@ -4,8 +4,10 @@ Hay que instalar:
 - [Tensorflow](https://www.tensorflow.org/install)
 - OpenCV 3: [Windows](https://pypi.python.org/pypi/opencv-python) o [Mac, Linux y RaspberryPi](https://www.pyimagesearch.com/opencv-tutorials-resources-guides/)
 - [Pip](https://pip.pypa.io/en/stable/installing/)
-- Install python dependencies: `pip3 install -r requirements.txt`
-Si tenés una computadora con GPU, primero modificá `requirements.txt`
+
+- Instalar las dependencias: `pip3 install -r requirements.txt`
+
+	Si tenés una computadora con GPU, primero modificá `requirements.txt`
 para instalar `tensorflow-gpu` en vez de `tensorflow`.
 
 ## MNIST Tutorial
@@ -19,6 +21,7 @@ python3 ./mnist_tutorial/mnist_deep.py
 
 ### Grabar como secuencia de imágenes
 1. Correr `python3 capture_frames.py --video_dir ./<path_a_carpeta>`.
+
 Las imágenes van a tener el formato `YYYY-MM-dd hh-mm-ss.ms`
 
 ## Descargar CNN Inception
@@ -31,10 +34,12 @@ python3 ./cnn/download_model.py
 	--model_dir ./cnn/inception
 ```
 
-De todas formas, los pasos que lo necesiten se encargarán de esto.
+(De todas formas, los siguientes scripts se encargarán de descargarlo de ser necesario.)
 
 
 ## CNN
+Es un red que toma una imagen y la clasifica en una clase,
+mediante capas convolucionales y de pool.
 
 ### Reentrenamiento
 Para reentrenar la última capa de la red Inception con tus propias fotos:
@@ -76,7 +81,11 @@ python3 ./cnn/classify_files.py
 ```
 
 
-## RCNN
+## RNN (o RCNN)
+Es una red que clasifica una imagen en una clase,
+usando información de N frames anteriores además de la actual.
+Por esto sirve para videos o secuencias temporales de imágenes.
+
 
 ### Reentrenamiento
 
@@ -104,28 +113,107 @@ Acá importa para la clasificación cómo van apareciendo las clases y sus tiemp
 ```
 Nota: es de suma importancia los rangos de los timestamps. Pues si no se tiene en cuenta algun frame el mismo va a ser clasificado con clase None.
 
-2. Moverse a la carpeta `rcnn`.
-3. Reentrená la CNN usando el retrain dentro de rcnn. Corré el comando:
-```
-python3 ./retrain_cnn.py --bottleneck_dir=./cnn/bottleneck --model_dir=./cnn/inception --output_graph=./cnn/retrained_graph.pb --output_labels=./cnn/retrained_labels.txt --processed_video_dir ./videos
-```
-4. En el archivo `build_labels.py` , modificar los batches deseados (los videos que se quieren labelear).
-5. Correr el comando `python build_labels.py`.
-6. Modificar en el archivo `rnn_train.py` los batches que se quieren usar para entrenar y si se predijo sin o con pool.
-El primer camino (sin pool) sirve para predecir los datos del training usando sólo el resultado de los frames anteriores.
-El segundo predice usando los datos del frame anterior de la última capa previa a la predicción, dándole más información.
-7. Correr el comando `python rnn_train.py`.
+#### Reentrenar
 
+1. Correr:
+```
+python3 ./rcnn/build_labels.py
+	--videos_dir ./rcnn/videos
+	--classes_file classes
+	--classes_dict class_per_frame
+	--output_labels_dir ./rcnn/data/labeled_frames
+	--copy_dir ./rcnn/data/frames_by_class
+	[--videos "video1" "video2" "..."]
+```
+Si tiene sólo ciertos videos nuevos, podés correrlo sólo para esos videos y se agregarán a los viejos.
+
+2. Reentrenar la CNN, corriendo:
+```
+python3 ./cnn/retrain.py
+	--bottleneck_dir ./cnn/bottleneck
+	--model_dir ./cnn/inception
+	--output_graph ./rcnn/data/cnn_retrained_graph.pb
+	--output_labels ./rcnn/data/retrained_labels.txt
+	--image_dir ./rcnn/data/frames_by_class
+```
+Se va a reentrenar con toda la información que esté en frames_by_class,
+si no se borró nada, va a ser el resultado de todas las corridas hechas a build_labels.
+
+3. Ahora vamos a clasificar nuestros videos con la CNN para guardar
+la información que la CNN saca de ellos para usar en la RNN.
+Para esto hay 2 opciones:
+
+    - **Predicción Simple:** La RNN usará el resultado final de la CNN,
+para cada frame anterior a analizar.
+
+	```
+	python3 ./rcnn/make_predictions.py
+		--frames_labels_dir ./rcnn/data/labeled_frames
+		--cnn_labels ./rcnn/data/retrained_labels.txt
+		--cnn_graph ./rcnn/data/cnn_retrained_graph.pb
+		--predictions_dir ./rcnn/data/ccn_predictions
+		--videos_dir ./rcnn/videos
+		[--videos "video1" "video2" "..."]
+	```
+
+    - **Predicción Pool:** La RNN usará la información de toda la última capa de la CNN, para cada frame anterior a analizar.
+
+	```
+	python3 ./rcnn/make_predictions_pool.py
+		--frames_labels_dir ./rcnn/data/labeled_frames
+		--cnn_graph ./rcnn/data/retrained_graph.pb
+		--predictions_dir ./rcnn/data/cnn_predictions
+		--videos_dir ./rcnn/videos
+		[--videos "video1" "video2" "..."]
+	```
+
+4. Reentrenar la red, corriendo lo siguiente.
+
+	Agregar el flag `-pool` solamente si en el paso anterior se usó la **Predicción Pool**.
+```
+python3 ./rcnn/rnn_train.py
+	[-pool]
+	--predictions_dir ./rcnn/data/cnn_predictions
+	--output_model ./rcnn/data/rnn.tflearn
+	[--videos "video1" "video2" "..."]
+```
 
 ### Clasificación de un video real time
 Clasifica cada 4 segundos (40 frames), el frame que se está viendo.
 
 1. Reentrená la red
-2.
+2. 
 
 ### Clasificación de un video
 Clasifica los distintos frames del video.
 
 1. Reentrená la red
-2. En el archivo `make_predictions.py` o `make_predictions_pool.py` modificar los batches que se quieren predecir.
-3. Correr el comando `python make_predictions.py` o `python make_predictions_pool.py` correspondientemente, según lo elegido en el paso 5 del reentrnamiento.
+2. Grabá tu video con:
+```
+python3 capture_frames.py --video_dir ./test/videos/<tu_video>
+```
+3. Corré:
+```
+python3 ./rcnn/build_labels.py
+	--videos_dir ./test/videos
+	--classes_file classes
+	--classes_dict class_per_frame
+	--output_labels_dir ./test/data/labeled_frames
+	--copy_dir ./test/data/frames_by_class
+	--videos "<tu_video>"
+```
+4. Corré:
+```
+python3 ./rcnn/make_predictions.py
+	--frames_labels_dir ./test/data/labeled_frames
+	--cnn_labels ./rcnn/data/retrained_labels.txt
+	--cnn_graph ./rcnn/data/cnn_retrained_graph.pb
+	--predictions_dir ./test/data/ccn_predictions
+	--videos_dir ./test
+	--videos "<tu_video>"
+```
+o la otra..
+5. Corré:
+```
+python3 ./rcnn/rnn_eval.py
+```

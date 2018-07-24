@@ -21,5 +21,10 @@ class_per_frame = { # This is an example. Modify upon usage.
         'Cantando': [
             {'start': '2018-04-10 23:12:07.134260', 'end': '2018-04-10 23:13:23.906373'}
         ]
+    },
+    'dani_h': {
+        'Hablando': [
+            {'start': '2018-06-27 23:49:11.749203', 'end': '2018-06-27 23:49:14.225127'}
+        ]
     }
 }
