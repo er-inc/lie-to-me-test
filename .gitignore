@@ -1,26 +1,3 @@
 # Mac noise
 .DS_Store
 */.DS_Store
-
-# Python noise
-__pycache__/*
-*/__pycache__/*
-*.pyc
-*/*.pyc
-
-# Data
-cnn/photos/*
-rcnn/videos/*
-rcnn/data/*
-*.zip
-*/*.zip
-
-# Training data
-cnn/bottleneck/*/*
-cnn/inception/*
-cnn/retrained_graph.pb
-cnn/retrained_labels.txt
-rcnn/cnn/*
-
-test/
-test/*/*
