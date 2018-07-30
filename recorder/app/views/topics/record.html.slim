@@ -1,0 +1,5 @@
+| Mira que linda vista
+
+= form_tag(save_videos_path, method: 'post') do
+  = hidden_field_tag 'marks[]'
+  = submit_tag 'Guardar video'
