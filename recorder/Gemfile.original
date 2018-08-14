@@ -78,8 +78,6 @@ gem 'rack-attack'
 
 gem 'webpacker', '~> 3.0'
 
-gem 'react-rails', github: 'reactjs/react-rails'
-
 gem 'health_check', '~> 3.0'
 
 group :development do

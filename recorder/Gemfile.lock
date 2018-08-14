@@ -1,4 +1,15 @@
 GIT
+  remote: git://github.com/reactjs/react-rails.git
+  revision: 99bb21a561b929d141600acda4eb218d1154a93f
+  specs:
+    react-rails (2.4.7)
+      babel-transpiler (>= 0.7.0)
+      connection_pool
+      execjs
+      railties (>= 3.2)
+      tilt
+
+GIT
   remote: https://github.com/activeadmin/activeadmin
   revision: 084ebef0bd2fb41650648314ee0a69649082201b
   specs:
@@ -549,6 +560,7 @@ DEPENDENCIES
   rails (~> 5.1.3)
   rails-controller-testing
   rails_12factor
+  react-rails!
   recipient_interceptor
   responders
   rollbar
@@ -580,4 +592,4 @@ RUBY VERSION
    ruby 2.4.0p0
 
 BUNDLED WITH
-   1.16.0
+   1.16.3
