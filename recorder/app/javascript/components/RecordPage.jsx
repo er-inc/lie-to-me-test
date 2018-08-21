@@ -54,12 +54,22 @@ class RecordPage extends React.Component {
 
   stopRecord() {
     this.state.recordVideo.stopRecording(() => {
-      let params = {
-        type: 'video/webm',
-        data: this.state.recordVideo.blob,
-        id: Math.floor(Math.random()*90000) + 10000
-      }
+      this.state.recordVideo.save('Test');
     });
+  }
+
+  saveBlob(blob, fileName) {
+    console.log("saving blob");
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+    return (blob, fileName) => {
+      var url = window.URL.createObjectURL(blob);
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    };
   }
 
   render() {
