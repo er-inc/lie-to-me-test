@@ -9,7 +9,6 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.0",
-    "babel-preset-react": "^6.24.1",
     "bootstrap": "^3.3.7",
     "coffee-loader": "^0.8.0",
     "coffee-script": "^1.12.7",
@@ -47,6 +46,7 @@
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-react": "^6.24.1",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.1",
     "eslint-config-prettier": "^2.1.1",
