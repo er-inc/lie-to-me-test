@@ -10,8 +10,10 @@ class RecordPage extends React.Component {
     super(props);
 
     this.state = {
+      startTimestamp: null,
       recordVideo: null,
-      src: null,
+      question_timestamps: [],
+      answer_timestamps: [],
     };
 
     this.requestUserMedia = this.requestUserMedia.bind(this);
@@ -28,7 +30,7 @@ class RecordPage extends React.Component {
   }
 
   captureUserMedia(callback) {
-    navigator.getUserMedia({ audio: false, video: true }, callback, (error) => {
+    navigator.getUserMedia({ audio: true, video: true }, callback, (error) => {
       alert(JSON.stringify(error));
     });
   }
@@ -46,10 +48,7 @@ class RecordPage extends React.Component {
       this.state.recordVideo = RecordRTC(stream, { type: 'video' });
       this.state.recordVideo.startRecording();
     });
-
-    setTimeout(() => {
-      this.stopRecord();
-    }, 4000);
+    this.state.startTimestamp = new Date().getTime();
   }
 
   stopRecord() {
@@ -58,18 +57,29 @@ class RecordPage extends React.Component {
     });
   }
 
-  saveBlob(blob, fileName) {
-    console.log("saving blob");
-    var a = document.createElement("a");
-    document.body.appendChild(a);
-    a.style = "display: none";
-    return (blob, fileName) => {
-      var url = window.URL.createObjectURL(blob);
-      a.href = url;
-      a.download = fileName;
-      a.click();
-      window.URL.revokeObjectURL(url);
-    };
+  startQuestion() {
+    this.state.question_timestamps.push(getInfo(new Date().getTime() - this.state.startTimestamp));
+  }
+
+  startAnswer() {
+    this.state.answer_timestamps.push(getInfo(new Date().getTime() - this.state.startTimestamp));
+  }
+
+  getInfo(milisecs) {
+    var secs = milisecs / 1000;
+    var min = Math.floor(secs / 60);
+    var sec = Math.floor(secs - (min * 60));
+    var milisec = milises % 1000;
+
+    if (min < 10) {
+      min = "0" + min;
+    }
+
+    if (sec < 10) {
+      sec = "0" + sec;
+    }
+
+    return '${min}-${sec}';
   }
 
   render() {
@@ -77,6 +87,9 @@ class RecordPage extends React.Component {
       <div>
         <div><Webcam src={this.state.src}/></div>
         <div><button onClick={this.startRecord}>Start Record</button></div>
+        <div><button onClick={this.stopRecord}>Stop Record</button></div>
+        <div><button onClick={this.startQuestion}>Question Starts</button></div>
+        <div><button onClick={this.startAnswer}>Answer Starts</button></div>
       </div>
     )
   }
