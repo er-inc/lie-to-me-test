@@ -1,3 +1,7 @@
 # Mac noise
 .DS_Store
 */.DS_Store
+
+# Rails noise
+*/yarn.lock
+*/package.json
